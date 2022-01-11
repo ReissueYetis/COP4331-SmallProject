@@ -2,9 +2,9 @@
 
 ## Members
 - Acevedo, Daniel
-- Cobble, Addison
+- Cobble, Addison (@ajax146)
 - Gutierrez, Santiago
-- Lum Shue Chan, Caleb
+- Lum Shue Chan, Caleb (@DaFluffyPotato)
 - Phan, Andrew
 - Volny, Jovan
 
