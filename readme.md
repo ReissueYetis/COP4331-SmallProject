@@ -2,7 +2,7 @@
 
 ## Members
 - Acevedo, Daniel
-- Cobble, Addison (@ajax146)
+- Cobble, Addison (@ReissueYetis)
 - Gutierrez, Santiago
 - Lum Shue Chan, Caleb (@clumshuechan)
 - Phan, Andrew
