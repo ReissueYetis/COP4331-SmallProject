@@ -4,7 +4,7 @@
 - Acevedo, Daniel
 - Cobble, Addison (@ajax146)
 - Gutierrez, Santiago
-- Lum Shue Chan, Caleb (@DaFluffyPotato)
+- Lum Shue Chan, Caleb (@clumshuechan)
 - Phan, Andrew
 - Volny, Jovan
 
