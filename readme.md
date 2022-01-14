@@ -3,10 +3,10 @@
 ## Members
 - Acevedo, Daniel (@DA1030)
 - Cobble, Addison (@ReissueYetis)
-- Gutierrez, Santiago
+- Gutierrez, Santiago (@santigut123)
 - Lum Shue Chan, Caleb (@clumshuechan)
-- Phan, Andrew
-- Volny, Jovan
+- Phan, Andrew (@treenamu)
+- Volny, Jovan (@J-VOL)
 
 ## Discord link
 https://discord.gg/y5trnC2T
