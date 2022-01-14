@@ -1,7 +1,7 @@
 # COP4331 small project
 
 ## Members
-- Acevedo, Daniel
+- Acevedo, Daniel (@DA1030)
 - Cobble, Addison (@ReissueYetis)
 - Gutierrez, Santiago
 - Lum Shue Chan, Caleb (@clumshuechan)
