@@ -17,3 +17,22 @@
             }, false)
         })
 })()
+
+function makeEventListeners (){
+    makeLoginEventListeners()
+}
+function getLoginInfo(){
+    let user = document.getElementById("loginUser").value
+    let pass = document.getElementById("loginPass").value
+    return {user,pass}
+}
+function userLogin(){
+    let loginInfo= getLoginInfo()
+    console.log(loginInfo.pass)
+
+}
+function makeLoginEventListeners(){
+    let loginButton = document.getElementById("loginButton")
+    loginButton.addEventListener("click",userLogin)
+}
+makeEventListeners()
