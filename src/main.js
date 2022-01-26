@@ -185,7 +185,7 @@ function userLogin(){
         {
             document.getElementById("passValMsg").innerHTML = badLoginMsg;
             // document.getElementById("passValMsg").innerHTML = err.message;
-            // console.log("Lo")
+            console.log("Bad login")
             return false;
         }
 
