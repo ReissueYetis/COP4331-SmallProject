@@ -138,7 +138,7 @@ function getLoginInfo(){
 
 function userLogin(){
     let loginInfo= getLoginInfo()
-    console.log(loginInfo.pass)
+    console.log(loginInfo.password)
 
     // function doLogin(login, password){
         userId = 0;
