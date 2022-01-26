@@ -52,7 +52,7 @@ const passMismatch = "Passwords do not match";
 //     isPasswordMatch = repeatPassword !== '' && password === repeatPassword;
 // }, false);
 
-regForm.addEventListener('submit', function(event) {
+/*regForm.addEventListener('submit', function(event) {
 
     let userInput = document.getElementById("regUser");
     let passInput = document.getElementById("regPass");
@@ -96,7 +96,7 @@ regForm.addEventListener('submit', function(event) {
         userInput.setCustomValidity(badUserRegMsg);
         document.getElementById("regUserValMsg").innerHTML = badUserRegMsg;
         return;
-    }*/
+    }
 
     regForm.classList.add('was-validated');
 }, false);
@@ -104,9 +104,7 @@ regForm.addEventListener('submit', function(event) {
 
 
 function doRegister(login, password){
-
-}
-
+*/
 (function () {
     'use strict'
 
@@ -126,7 +124,6 @@ function doRegister(login, password){
             }, false)
         })
 })()
-
 function makeEventListeners (){
     makeLoginEventListeners()
 
@@ -138,65 +135,20 @@ function getLoginInfo(){
 
 }
 
-function userLogin(){
+async function userLogin(){
     let loginInfo= getLoginInfo()
-    console.log(loginInfo.password)
-    console.log("login log test")
-    // function doLogin(login, password){
-        userId = 0;
-        firstName = "";
-        lastName = "";
-
-        //	var hash = md5( password );
-
-        let jsonPayload = JSON.stringify(loginInfo)
-
-
-        let url = urlBase + '/Login.' + extension;
-
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", url, true);
-        xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-        try
-        {
-            xhr.onreadystatechange = function()
-            {
-                if (this.readyState === 4 && this.status === 200)
-                {
-                    let jsonObject = JSON.parse( xhr.responseText );
-                    userId = jsonObject.id;
-
-                    if( userId < 1 )
-                    {
-                        // document.getElementById("loginResult").innerHTML = "User/Password combination incorrect";
-                        return false;
-                    }
-
-                    // <<<<<<< HEAD
-                    // firstName = jsonObject.firstName;
-                    // lastName = jsonObject.lastName;
-
-                    // saveCookie();
-
-                    // window.location.href = "color.html";
-                }
-            };
-            xhr.send(jsonPayload);
-        }
-        catch(err)
-        {
-            document.getElementById("passValMsg").innerHTML = badLoginMsg;
-            // document.getElementById("passValMsg").innerHTML = err.message;
-            console.log("Bad login")
-            return false;
-        }
-
-    // }
-
+    const loginCon = await fetch('/API/Login.php',{
+        method: 'POST',
+        body: JSON.stringify(loginInfo)
+    });
+    const loginResult = await loginCon.json();
+    if(!loginResult.ok) {
+      throw Error(`Request rejected with status ${res.status}`);
+    }
+    console.log(loginResult);
 }
 function makeLoginEventListeners(){
     let loginButton = document.getElementById("loginButton")
     loginButton.addEventListener("click",userLogin)
 }
 makeEventListeners()
-
