@@ -129,11 +129,13 @@ function doRegister(login, password){
 
 function makeEventListeners (){
     makeLoginEventListeners()
+    console.log("login log test")
 }
 function getLoginInfo(){
     let login = document.getElementById("loginUser").value
     let password = document.getElementById("loginPass").value
     return {login,password}
+
 }
 
 function userLogin(){
