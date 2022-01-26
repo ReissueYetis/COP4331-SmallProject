@@ -129,7 +129,7 @@ function doRegister(login, password){
 
 function makeEventListeners (){
     makeLoginEventListeners()
-    console.log("login log test")
+
 }
 function getLoginInfo(){
     let login = document.getElementById("loginUser").value
@@ -141,7 +141,7 @@ function getLoginInfo(){
 function userLogin(){
     let loginInfo= getLoginInfo()
     console.log(loginInfo.password)
-
+    console.log("login log test")
     // function doLogin(login, password){
         userId = 0;
         firstName = "";
