@@ -17,30 +17,7 @@ const badUserRegMsg = "Username taken"
 const badPassMsg = "Password Requirements:<ul><li>Must contain a number, a special character, an uppercase letter, and a lower case letter</li><li>Is at least 8 characters long</li></ul>";
 const passMismatch = "Passwords do not match";
 
-// loginForm.addEventListener('submit', function(event) {
-//
-//     let userInput = document.getElementById("loginUser");
-//     let passInput = document.getElementById("loginPass");
-//
-//     if (loginForm.checkValidity() === false) {//!userInput.checkValidity() || !passInput.checkValidity()
-//         event.preventDefault();
-//         event.stopPropagation();
-//         // return;
-//     }
-//     if (!doLogin(userInput, passInput)){
-//         event.preventDefault();
-//         event.stopPropagation();
-//
-//         userInput.setCustomValidity(badLoginMsg);
-//         document.getElementById("userValMsg").innerHTML = badLoginMsg;
-//
-//         passInput.setCustomValidity(badLoginMsg);
-//         document.getElementById("passValMsg").innerHTML = badLoginMsg;
-//         // return;
-//     }
-//
-//     loginForm.classList.add('was-validated');
-// }, false);
+
 
 // regForm.addEventListener('input', function(event) {
 //     const formData = new FormData(regForm);
@@ -105,34 +82,44 @@ const passMismatch = "Passwords do not match";
 
 function doRegister(login, password){
 */
-(function () {
-    'use strict'
+// (function () {
+//     'use strict'
+//
+//     // Fetch all the forms we want to apply custom Bootstrap validation styles to
+//     let forms = document.querySelectorAll('.needs-validation')
+//
+//     // Loop over them and prevent submission
+//     Array.prototype.slice.call(forms)
+//         .forEach(function (form) {
+//             form.addEventListener('submit', function (event) {
+//                 if (!form.checkValidity()) {
+//                     event.preventDefault()
+//                     event.stopPropagation()
+//                 }
+//
+//                 form.classList.add('was-validated')
+//             }, false)
+//         })
+// })()
 
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    let forms = document.querySelectorAll('.needs-validation')
-
-    // Loop over them and prevent submission
-    Array.prototype.slice.call(forms)
-        .forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                }
-
-                form.classList.add('was-validated')
-            }, false)
-        })
-})()
 function makeEventListeners (){
     makeLoginEventListeners()
-
+    makeRegEventListeners()
 }
+
 function getLoginInfo(){
     let login = document.getElementById("loginUser").value
     let password = document.getElementById("loginPass").value
     return {login,password}
 
+}
+
+function getRegInfo(){
+    let fName = document.getElementById("regFName").value
+    let lName = document.getElementById("regFName").value
+    let user = document.getElementById("regUser").value
+    let password = document.getElementById("regPass").value
+    return {fName, lName, user, password}
 }
 
 async function userLogin(){
@@ -143,12 +130,59 @@ async function userLogin(){
     });
     const loginResult = await loginCon.json();
     if(!loginResult.ok) {
-      throw Error(`Request rejected with status ${res.status}`);
+
+        let userInput = document.getElementById("loginUser");
+        let passInput = document.getElementById("loginPass");
+
+        userInput.setCustomValidity(badLoginMsg);
+        document.getElementById("userValMsg").innerHTML = badLoginMsg;
+
+        passInput.setCustomValidity(badLoginMsg);
+        document.getElementById("passValMsg").innerHTML = badLoginMsg;
+
+        throw Error(`Request rejected with status ${loginResult.status}`);
     }
     console.log(loginResult);
 }
+
+function userRegistration(){
+    let regInfo = getRegInfo();
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", urlBase+"/API/Register.php",true);
+    xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+
+    try
+    {
+        xhr.onreadystatechange = function()
+        {
+            if (xhr.readyState === 4 && xhr.status === 200)
+            {
+                let jsonObject = JSON.parse( xhr.response );
+                userId = jsonObject.id;
+
+                if( userId < 1 )
+                {
+                    document.getElementById("regUserValMsg").innerHTML = badUserRegMsg;
+                    console.log(badUserRegMsg);
+                }
+            }
+        };
+        xhr.send(JSON.stringify(regInfo));
+    }
+    catch(err)
+    {
+        document.getElementById("loginResult").innerHTML = err.message;
+    }
+}
+
 function makeLoginEventListeners(){
     let loginButton = document.getElementById("loginButton")
-    loginButton.addEventListener("click",userLogin)
+    loginButton.addEventListener("click", userLogin)
 }
+
+function makeRegEventListeners(){
+    let regButton = document.getElementById("regButton")
+    regButton.addEventListener("click", userRegistration)
+}
+
 makeEventListeners()
