@@ -20,7 +20,7 @@
 		{
 			returnWithError("Field Value Too Large");
 		}
-		else if (preg_match($phoneRegex, $inData["phoneNumber"]) == false)
+		else if ((preg_match($phoneRegex, $inData["phoneNumber"]) == false) && ($inData["phoneNumber"] != ""))
 		{
 			returnWithError("Phone Number Invalid");
 		}
