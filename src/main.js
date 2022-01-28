@@ -121,7 +121,7 @@ function getRegInfo(){
     return {fName, lName, user, password}
 }
 
-async function userLogin(){
+function userLogin(event){
     let loginInfo = getLoginInfo()
     console.log(JSON.stringify(loginInfo));
     // const loginCon = await fetch('/API/Login.php',{
@@ -129,8 +129,7 @@ async function userLogin(){
     //     body: JSON.stringify(loginInfo)
     // });
     // const loginResult = await loginCon.json();
-    postJSON(urlBase + "/API/Login.php", loginInfo, callback())
-    if(!loginResult.ok) {
+    if(!postJSON(urlBase + "/API/Login.php", loginInfo, callback)) {
 
         let userInput = document.getElementById("loginUser");
         let passInput = document.getElementById("loginPass");
@@ -141,28 +140,31 @@ async function userLogin(){
         passInput.setCustomValidity(badLoginMsg);
         document.getElementById("passValMsg").innerHTML = badLoginMsg;
 
+        event.preventDefault();
+        event.stopPropagation();
 
         // throw Error(`Request rejected with status ${loginResult.status}`);
     }
-    console.log(loginResult);
+    loginForm.classList.add('was-validated');
+    // console.log(loginResult);
 }
 
 function postJSON(url, json_data, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.responseType = "json";
-    xhr.send(JSON.stringify(json_data));
-    xhr.onload = function() {
-        var status = xhr.status;
-        if (status === 200) {
-            callback(null, xhr.response);
-            return true;
-        } else {
-            callback(status, xhr.response);
-            return false;
-        }
-    }
+    // var xhr = new XMLHttpRequest();
+    // xhr.open("POST", url, true);
+    // xhr.setRequestHeader("Content-Type", "application/json");
+    // xhr.responseType = "json";
+    // xhr.send(JSON.stringify(json_data));
+    // xhr.onload = function() {
+    //     var status = xhr.status;
+    //     if (status === 200) {
+    //         callback(null, xhr.response);
+    //         return true;
+    //     } else {
+    //         callback(status, xhr.response);
+    //         return false;
+    //     }
+    // }
     return false;
 }
 
@@ -180,11 +182,10 @@ function loginSubmit(event) {
 
     if (!loginForm.checkValidity()) {//!userInput.checkValidity() || !passInput.checkValidity()
         event.preventDefault();
-        event.stopPropagation();
+        // event.stopPropagation();
     }
-    // else {
-    //     loginForm.classList.add('was-validated');
-    // }
+    loginForm.classList.add('was-validated');
+
 }
 
 
@@ -223,7 +224,9 @@ function makeLoginEventListeners(){
     loginForm.addEventListener('submit', function(event){
         loginSubmit(event)
     });
-    loginButton.addEventListener("submit", userLogin)
+    loginForm.addEventListener("submit", function(event) {
+        userLogin(event)
+    });
 }
 
 function makeRegEventListeners(){
