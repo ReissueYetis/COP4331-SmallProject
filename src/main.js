@@ -123,7 +123,7 @@ function getRegInfo(){
 }
 
 async function userLogin(){
-    let loginInfo= getLoginInfo()
+    let loginInfo = getLoginInfo()
     const loginCon = await fetch('/API/Login.php',{
         method: 'POST',
         body: JSON.stringify(loginInfo)
@@ -140,10 +140,64 @@ async function userLogin(){
         passInput.setCustomValidity(badLoginMsg);
         document.getElementById("passValMsg").innerHTML = badLoginMsg;
 
+
         throw Error(`Request rejected with status ${loginResult.status}`);
     }
     console.log(loginResult);
 }
+
+function postJSON(url, json_data, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.responseType = "json";
+    xhr.send(JSON.stringify(json_data));
+    xhr.onload = function() {
+        var status = xhr.status;
+        if (status === 200) {
+            callback(null, xhr.response);
+            return true;
+        } else {
+            callback(status, xhr.response);
+            return false;
+        }
+    }
+    return false;
+}
+
+function callback(status, data) {
+    console.log(data);
+}
+
+// postJSON("/API/Login.php", {"login": "Test55", "password": "44"}, callback);
+/*
+function loginSubmit(event) {
+
+    let userInput = document.getElementById("loginUser");
+    let passInput = document.getElementById("loginPass");
+    let loginInfo = getLoginInfo();
+
+    if (!loginForm.checkValidity()) {//!userInput.checkValidity() || !passInput.checkValidity()
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    if (!postJSON("/API/Login.php", loginInfo, callback)){
+        event.preventDefault();
+        event.stopPropagation();
+
+        userInput.setCustomValidity(badLoginMsg);
+        document.getElementById("userValMsg").innerHTML = badLoginMsg;
+
+        passInput.setCustomValidity(badLoginMsg);
+        document.getElementById("passValMsg").innerHTML = badLoginMsg;
+        // return;
+    }
+    else {
+        loginForm.classList.add('was-validated');
+    }
+}
+*/
+
 
 function userRegistration(){
     let regInfo = getRegInfo();
@@ -175,9 +229,14 @@ function userRegistration(){
     }
 }
 
+
+
 function makeLoginEventListeners(){
     let loginButton = document.getElementById("loginButton")
-    loginButton.addEventListener("click", userLogin)
+    loginForm.addEventListener('submit', function(event){
+        loginSubmit(event)
+    });
+    // loginButton.addEventListener("submit", userLogin)
 }
 
 function makeRegEventListeners(){

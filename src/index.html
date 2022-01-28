@@ -28,17 +28,17 @@
 <!--                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username" required>-->
                 <label for="loginUser">Username</label>
                 <input type="text" class="form-control" id="loginUser" aria-describedby="name" placeholder="Enter Username" required>
-                <div class="invalid-feedback">Please enter a username.</div>
+                <div class="invalid-feedback" id="userValMsg">Please enter a username.</div>
             </div>
             <div class="form-group mb-2">
                 <label for="loginPass">Password</label>
                 <input type="password" class="form-control" id="loginPass" placeholder="Password" required>
-                <div class="invalid-feedback">Please enter a password.</div>
+                <div class="invalid-feedback" id="passValMsg">Please enter a password.</div>
             </div>
             <div class="form-group form-check">
             </div>
 
-            <button id="loginButton" type="button" class="btn btn-primary btn-sm">Login</button>
+            <button id="loginButton" type="submit" class="btn btn-primary btn-sm">Login</button>
 
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#registerModal">
@@ -57,14 +57,20 @@
                     <form class="row needs-validation" novalidate>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="regFName">First Name</label>
-                                <input type="Text" class="form-control" id="regFName" placeholder="First Name" required>
-                                <div class="invalid-feedback">Please enter your first name</div>
-                            </div>
-                            <div class="form-group">
-                                <label for="regLName">First Name</label>
-                                <input type="Text" class="form-control" id="regLName" placeholder="Last Name" required>
-                                <div class="invalid-feedback">Please enter your last name</div>
+                               <div class="row">
+                                   <div class="col">
+                                        <label for="regFName">First Name</label>
+                                        <input type="Text" class="form-control" id="regFName" placeholder="First Name" required>
+                                        <div class="invalid-feedback">Please enter your first name</div>
+                                   </div>
+                                   <div class="col">
+                                        <!--                            </div>-->
+                                        <!--                            <div class="form-group">-->
+                                        <label for="regLName">Last Name</label>
+                                        <input type="Text" class="form-control" id="regLName" placeholder="Last Name" required>
+                                        <div class="invalid-feedback">Please enter your last name</div>
+                                   </div>
+                                </div>
                             </div>
                             <div class="form-group">
 <!--                                <label for="regInputUsername" class="form-label">Username</label>-->
