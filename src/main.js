@@ -123,7 +123,8 @@ function getRegInfo(){
 }
 
 async function userLogin(){
-    let loginInfo = getLoginInfo()
+    let loginInfo= getLoginInfo()
+    console.log(JSON.stringify(loginInfo));
     const loginCon = await fetch('/API/Login.php',{
         method: 'POST',
         body: JSON.stringify(loginInfo)
@@ -228,8 +229,6 @@ function userRegistration(){
         document.getElementById("loginResult").innerHTML = err.message;
     }
 }
-
-
 
 function makeLoginEventListeners(){
     let loginButton = document.getElementById("loginButton")
