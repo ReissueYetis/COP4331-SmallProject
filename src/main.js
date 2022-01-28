@@ -124,6 +124,7 @@ function getRegInfo(){
 
 async function userLogin(){
     let loginInfo= getLoginInfo()
+    console.log(JSON.stringify(loginInfo));
     const loginCon = await fetch('/API/Login.php',{
         method: 'POST',
         body: JSON.stringify(loginInfo)

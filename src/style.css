@@ -1,5 +1,32 @@
+h1{
+    font-size: 150px;
+}
 .form-container {
-    border:1px;
-    padding:30px 40px;
+    padding:50px 50px;
+    margin: 50px 50px;
+    background-color:whitesmoke;
+    border-radius:25px;
 
+    align-content: center;
+    justify-self: center;
+}
+#loginForm{
+    align-self: center;
+    height:600px;
+}
+#content{
+    background-color: lightblue;
+    justify-content: center;
+
+}
+#mainTitle{
+    font-size:75px;
+    color: darkblue;
+}
+#mainLogo{
+    height:175px;
+    width:175px;
+}
+.btn{
+    size:100px 50px;
 }

@@ -13,7 +13,7 @@
         <!-- Place favicon.ico in the root directory -->
 
     </head>
-    <body>
+    <body id=content class="row">
         <!--[if lt IE 8]>
             <p class="browserupgrade">
             You are using an <strong>outdated</strong> browser. Please
@@ -21,9 +21,9 @@
             your experience.
             </p>
         <![endif]-->
-        <h1 class="text-center">Contact Man</h1>
-        <form class="form-container needs-validation" id="loginForm" novalidate>
-            <div class="form-group mb-4">
+        <h1 id= "mainTitle" class="text-center">Contact Man<img id="mainLogo" src="./resources/logo_transparent.png"></h1>
+        <form class="form-container needs-validation col-md-8  " id="loginForm" novalidate>
+            <div class="form-group mb-4 ">
 <!--                <label for="exampleInputEmail1">Username</label>-->
 <!--                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username" required>-->
                 <label for="loginUser">Username</label>
@@ -38,12 +38,18 @@
             <div class="form-group form-check">
             </div>
 
-            <button id="loginButton" type="button" class="btn btn-primary btn-sm">Login</button>
+            <div class= "container-fluid">
+            <div class="row">
+                <button id="loginButton" type="button" class="btn btn-primary col">Login</button>
 
+            </div>
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#registerModal">
+            <div class="row">
+            <button type="button" class="btn btn-link col " data-bs-toggle="modal" data-bs-target="#registerModal">
                 Register
             </button>
+            </div>
+            </div>
         </form>
 
         <!-- Modal -->
