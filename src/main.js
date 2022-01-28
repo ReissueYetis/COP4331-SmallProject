@@ -111,7 +111,6 @@ function getLoginInfo(){
     let login = document.getElementById("loginUser").value
     let password = document.getElementById("loginPass").value
     return {login,password}
-
 }
 
 function getRegInfo(){
@@ -123,13 +122,14 @@ function getRegInfo(){
 }
 
 async function userLogin(){
-    let loginInfo= getLoginInfo()
+    let loginInfo = getLoginInfo()
     console.log(JSON.stringify(loginInfo));
-    const loginCon = await fetch('/API/Login.php',{
-        method: 'POST',
-        body: JSON.stringify(loginInfo)
-    });
-    const loginResult = await loginCon.json();
+    // const loginCon = await fetch('/API/Login.php',{
+    //     method: 'POST',
+    //     body: JSON.stringify(loginInfo)
+    // });
+    // const loginResult = await loginCon.json();
+    postJSON(urlBase + "/API/Login.php", loginInfo, callback())
     if(!loginResult.ok) {
 
         let userInput = document.getElementById("loginUser");
@@ -142,7 +142,7 @@ async function userLogin(){
         document.getElementById("passValMsg").innerHTML = badLoginMsg;
 
 
-        throw Error(`Request rejected with status ${loginResult.status}`);
+        // throw Error(`Request rejected with status ${loginResult.status}`);
     }
     console.log(loginResult);
 }
@@ -171,7 +171,7 @@ function callback(status, data) {
 }
 
 // postJSON("/API/Login.php", {"login": "Test55", "password": "44"}, callback);
-/*
+
 function loginSubmit(event) {
 
     let userInput = document.getElementById("loginUser");
@@ -182,22 +182,10 @@ function loginSubmit(event) {
         event.preventDefault();
         event.stopPropagation();
     }
-    if (!postJSON("/API/Login.php", loginInfo, callback)){
-        event.preventDefault();
-        event.stopPropagation();
-
-        userInput.setCustomValidity(badLoginMsg);
-        document.getElementById("userValMsg").innerHTML = badLoginMsg;
-
-        passInput.setCustomValidity(badLoginMsg);
-        document.getElementById("passValMsg").innerHTML = badLoginMsg;
-        // return;
-    }
-    else {
-        loginForm.classList.add('was-validated');
-    }
+    // else {
+    //     loginForm.classList.add('was-validated');
+    // }
 }
-*/
 
 
 function userRegistration(){
@@ -235,7 +223,7 @@ function makeLoginEventListeners(){
     loginForm.addEventListener('submit', function(event){
         loginSubmit(event)
     });
-    // loginButton.addEventListener("submit", userLogin)
+    loginButton.addEventListener("submit", userLogin)
 }
 
 function makeRegEventListeners(){
