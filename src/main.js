@@ -20,17 +20,26 @@ function makeEventListeners (){
 
 function getLoginInfo(){
     let login = document.getElementById("loginUser").value
-    let password = document.getElementById("loginPass").value
+    let password = sha256(document.getElementById("loginPass").value)
     return {login,password}
+}
+
+async function sha256(password){
+    const encoder = new TextEncoder()
+    const data = encoder.encode(password)
+    const hash = await window.crypto.subtle.digest('SHA-256', data)
+    const hashArray = Array.from(new Uint8Array(hash))
+    return hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('')
 }
 
 function getRegInfo(){
     let firstName = document.getElementById("regFName").value
     let lastName = document.getElementById("regFName").value
     let login = document.getElementById("regUser").value
-    let password = crypto.subtle.digest("SHA-256", document.getElementById("regPass").value)
+    let password = sha256(document.getElementById("regPass").value)
     return {firstName, lastName, login, password}
 }
+
 function makeLoginEventListeners(){
     loginForm.addEventListener("submit", function(event){
         loginSubmit(event)
