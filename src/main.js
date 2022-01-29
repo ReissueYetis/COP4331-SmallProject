@@ -1,18 +1,12 @@
 const urlBase = 'https://cop4331.acobble.io/';
-const extension = 'php';
-
-// let userId = 0;
-// let firstName = "";
-// let lastName = "";
 
 const regForm = document.getElementById("regForm");
 const loginForm = document.getElementById("loginForm");
 
 let isPasswordMatch = false;
-let isPasswordValid = false;
 const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}/;
 
-const badLoginMsg = "Login not recognized";
+const badLoginMsg = "Username or password not recognized";
 const badPassMsg = "Password Requirements:<ul><li>Must contain a number, a special character, an uppercase letter, and a lower case letter</li><li>Is at least 8 characters long</li></ul>";
 const passMismatch = "Passwords do not match";
 const noPassEntered = "Please enter a password."
@@ -44,16 +38,10 @@ function makeLoginEventListeners(){
 }
 
 function makeRegEventListeners(){
-    // let regPassField = document.getElementById("regPass")
-    // regPassField.addEventListener("input", function(event){
-    //     checkComplexity(event)
-    // })
     regForm.addEventListener("submit", function(event){
         registerSubmit(event)
     }, false)
-    // regForm.addEventListener("submit", function(event){
-    //     userRegister(event)
-    // }, false)
+
 }
 
 function loginSubmit(event) {
@@ -72,19 +60,17 @@ function userLogin(event){
     event.preventDefault();
     let loginInfo = getLoginInfo()
     console.log(JSON.stringify(loginInfo));
+    let userInput = document.getElementById("loginUser");
+    let passInput = document.getElementById("loginPass")
 
     if(!postJSON(urlBase + "/API/Login.php", loginInfo, myCallback)) {
-
-        let userInput = document.getElementById("loginUser");
-        let passInput = document.getElementById("loginPass");
-
-        // userInput.setCustomValidity(badLoginMsg);
+        userInput.classList.add("is-invalid")
+        passInput.classList.add("is-invalid")
         document.getElementById("userValMsg").innerHTML = badLoginMsg;
-
-        // passInput.setCustomValidity(badLoginMsg);
         document.getElementById("passValMsg").innerHTML = badLoginMsg;
-        // throw Error(`Request rejected with status ${loginResult.status}`);
-        event.stopPropagation();
+
+    } else {
+        userInput.classList.add("is-valid")
     }
     event.stopPropagation();
     loginForm.classList.add('was-validated');
@@ -95,8 +81,6 @@ function registerSubmit(event) {
     event.preventDefault();
 
     let userInput = document.getElementById("regUser");
-    let passInput = document.getElementById("regPass");
-    let repeatInput = document.getElementById("regRepeatPass");
 
     const formData = new FormData(regForm);
     const password = formData.get("regPass").toString();
@@ -105,32 +89,25 @@ function registerSubmit(event) {
     isPasswordMatch = password === repeatPassword;
     if (userInput.value === ""){
         document.getElementById("regUserMsg").innerHTML = noUsername;
-        event.stopPropagation()
-        regForm.classList.add('was-validated');
     }
     if (password === "") {
         document.getElementById("regPassValMsg").innerHTML = noPassEntered;
 
-        if(repeatPassword === "")
+        if(repeatPassword === "") {
             document.getElementById("repeatPassMsg").innerHTML = noPassEntered;
-
-        event.stopPropagation();
-        regForm.classList.add('was-validated');
+        }
 
     } else if (!isPasswordMatch) {
-        // passInput.setCustomValidity(passMismatch);
         document.getElementById("regPassValMsg").innerHTML = passMismatch;
-
-        // repeatInput.setCustomValidity(passMismatch);
         document.getElementById("repeatPassMsg").innerHTML = passMismatch;
 
-        event.stopPropagation();
         regForm.classList.add('is-invalid');
-        regForm.classList.add('was-validated');
+
     } else {
         userRegister(event)
-        regForm.classList.add('was-validated');
     }
+    event.stopPropagation();
+    regForm.classList.add('was-validated');
 }
 
 function userRegister(event){
@@ -142,12 +119,11 @@ function userRegister(event){
     if(!postJSON(urlBase + "/API/Register.php", regInfo, myCallback)) {
         userInput.classList.add("is-invalid")
         document.getElementById("regUserMsg").innerHTML = badRegMsg;
-        event.stopPropagation();
 
     } else {
         userInput.classList.add("is-valid")
-        event.stopPropagation();
     }
+    event.stopPropagation();
     regForm.classList.add('was-validated');
 }
 
@@ -164,11 +140,9 @@ function postJSON(url, json_data, callback) {
             return true;
         } else {
             callback(status, xhr.response);
-            document.getElementById("userValMsg").innerHTML = badRegMsg;
             return false;
         }
     }
-    document.getElementById("userValMsg").innerHTML = badRegMsg;
     return false;
 }
 
