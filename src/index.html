@@ -30,27 +30,26 @@
 <!--                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username" required>-->
                 <label for="loginUser">Username</label>
                 <input type="text" class="form-control" id="loginUser" aria-describedby="name" placeholder="Enter Username" required>
-                <div class="invalid-feedback">Please enter a username.</div>
+                <div class="invalid-feedback" id="userValMsg">Please enter your username.</div>
             </div>
             <div class="form-group mb-2">
                 <label for="loginPass">Password</label>
                 <input type="password" class="form-control" id="loginPass" placeholder="Password" required>
-                <div class="invalid-feedback">Please enter a password.</div>
+                <div class="invalid-feedback" id="passValMsg">Please enter your password.</div>
             </div>
             <div class="form-group form-check">
             </div>
 
             <div class= "container-fluid">
-            <div class="row">
-                <button id="loginButton" type="button" class="btn btn-primary col">Login</button>
-
-            </div>
-            <!-- Button trigger modal -->
-            <div class="row">
-            <button type="button" class="btn btn-link col " data-bs-toggle="modal" data-bs-target="#registerModal">
-                Register
-            </button>
-            </div>
+                <div class="row">
+                    <button id="loginButton" type="submit" class="btn btn-primary col">Login</button>
+                </div>
+                <!-- Button trigger modal -->
+                <div class="row">
+                    <button type="button" class="btn btn-link col " data-bs-toggle="modal" data-bs-target="#registerModal">
+                    Register
+                    </button>
+                </div>
             </div>
         </form>
 
@@ -62,29 +61,42 @@
                         <h5 class="modal-title" id="registerModalLabel">Register an account</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form class="needs-validation" novalidate>
+                    <form class="needs-validation" id="regForm" novalidate>
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label for="regFName">First Name</label>
-                                <input type="Text" class="form-control" id="regFName" placeholder="First Name" required>
-                                <div class="invalid-feedback">Please enter your first name</div>
+                            <div class="form-group row">
+                                <div class="col">
+                                    <label for="regFName">First Name</label>
+                                    <input type="Text" class="form-control" id="regFName" placeholder="First Name" required>
+                                    <div class="invalid-feedback" id="fNameVal">Please enter your first name</div>
+                                </div>
+                                <div class="col">
+                                    <label for="regLName">First Name</label>
+                                    <input type="Text" class="form-control" id="regLName" placeholder="Last Name" required>
+                                    <div class="invalid-feedback" id="lNameMsg">Please enter your last name</div>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label for="regLName">First Name</label>
-                                <input type="Text" class="form-control" id="regLName" placeholder="Last Name" required>
-                                <div class="invalid-feedback">Please enter your last name</div>
-                            </div>
-                            <div class="form-group">
-<!--                                <label for="regInputUsername" class="form-label">Username</label>-->
-<!--                                <input type="email" class="form-control" id="regInputUsername" aria-describedby="emailHelp" placeholder="Enter Username" required>-->
                                 <label for="regUser">Username</label>
                                 <input type="text" class="form-control" id="regUser" aria-describedby="name" placeholder="Enter Username" required>
-                                <div class="invalid-feedback">Please enter a username.</div>
+                                <div class="invalid-feedback" id="regUserMsg"></div>
                             </div>
                             <div class="form-group">
                                 <label for="regPass" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="regPass" placeholder="Password" required>
-                                <div class="invalid-feedback">Please enter a password.</div>
+                                <input type="password" name="regPass" id="regPass"
+                                       class="form-control" placeholder="Password"
+                                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}" required
+                                >
+                                <div class="invalid-feedback" id="regPassValMsg"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="regRepeatPass" class="form-label">Repeat password</label>
+                                <input
+                                        type="password" name="regRepeatPass" id="regRepeatPass"
+                                        class="form-control" placeholder="Password"
+                                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}" required
+                                >
+                                <div class="invalid-feedback" id="repeatPassMsg"></div>
+                                <div class="valid-feedback" id="regSuccess"></div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -99,5 +111,4 @@
     </body>
     <script src="main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-
 </html>
