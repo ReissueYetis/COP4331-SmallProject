@@ -12,6 +12,7 @@ const passMismatch = "Passwords do not match";
 const noPassEntered = "Please enter a password."
 const noUsername = "Please enter a username."
 const badRegMsg = "Username already exists"
+const goodLogin = "Login Sucessful"
 
 function makeEventListeners (){
     makeLoginEventListeners()
@@ -24,7 +25,6 @@ function getLoginInfo(){
     //let password = document.getElementById("loginPass").value
     return {login,password}
 }
-
 
 function getRegInfo(){
     let firstName = document.getElementById("regFName").value
@@ -251,13 +251,17 @@ function postJSON(url, json_data, submitType, event) {
                     passInput.classList.add("is-valid")
                     userLogMsg.innerHTML = "Login success!";
                     passLogMsg.innerHTML = "Login success!";
+
+
                 }
             } else {
                 userInput.classList.add("is-invalid")
                 passInput.classList.add("is-invalid")
                 userLogMsg.innerHTML = "Login error, please try again.";
                 passLogMsg.innerHTML = "Login error, please try again.";
+                document.getElementById("content").innerHTML = "";
             }
+
             loginForm.classList.add('was-validated');
         }
         //    xhr.onload = userLogin(event, xhr)
