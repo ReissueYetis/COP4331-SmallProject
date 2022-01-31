@@ -1,4 +1,8 @@
-const urlBase = 'https://cop4331.acobble.io';
+var urlBase = 'https://cop4331.acobble.io';
+
+let userId = 0;
+let firstName = "";
+let lastName = "";
 
 const regForm = document.getElementById("regForm");
 const loginForm = document.getElementById("loginForm");
@@ -13,10 +17,14 @@ const noPassEntered = "Please enter a password."
 const noUsername = "Please enter a username."
 const badRegMsg = "Username already exists"
 
-function makeEventListeners (){
-    makeLoginEventListeners()
-    makeRegEventListeners()
+function hashPass(password){
+    return sha256(password)
 }
+
+// function makeEventListeners (){
+//     makeLoginEventListeners()
+//     makeRegEventListeners()
+// }
 
 function getLoginInfo(){
     let login = document.getElementById("loginUser").value
@@ -25,7 +33,6 @@ function getLoginInfo(){
     return {login,password}
 }
 
-
 function getRegInfo(){
     let firstName = document.getElementById("regFName").value
     let lastName = document.getElementById("regLName").value
@@ -33,27 +40,6 @@ function getRegInfo(){
     let password = sha256(document.getElementById("regPass").value)
     //let password = document.getElementById("regPass").value
     return {firstName, lastName, login, password}
-}
-
-async function sha256(password){
-    const encoder = new TextEncoder("utf-8")
-    const data = encoder.encode(password)
-    const hash = await window.crypto.subtle.digest('SHA-256', data)
-    const hashArray = Array.from(new Uint8Array(hash))
-    return hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('')
-}
-
-function makeLoginEventListeners(){
-    loginForm.addEventListener("submit", function(event){
-        loginSubmit(event)
-    }, false);
-}
-
-function makeRegEventListeners(){
-    regForm.addEventListener("submit", function(event){
-        registerSubmit(event)
-    }, false)
-
 }
 
 function loginSubmit(event) {
@@ -65,50 +51,13 @@ function loginSubmit(event) {
     }
     else {
         let loginInfo = getLoginInfo()
-        //console.log(loginInfo)
-        postJSON(urlBase + "/API/Login.php", loginInfo, "log", event)
+        console.log(loginInfo)
+        postJSON("https://cop4331.acobble.io/API/Login.php", loginInfo, "log", event)
+    }
+    if (readCookie()){
+        window.location.href = "contactsPage.html";
     }
 }
-
-/*
-function userLogin(event, xhr){
-    event.preventDefault();
-    //let loginInfo = getLoginInfo()
-    //console.log(JSON.stringify(loginInfo));
-    console.log(xhr.status)
-    console.log(xhr.response)
-
-    let userInput = document.getElementById("loginUser");
-    let passInput = document.getElementById("loginPass")
-
-    let userLogMsg = document.getElementById("userValMsg")
-    let passLogMsg = document.getElementById("passValMsg")
-
-    //let postObj = postJSON(urlBase + "/API/Login.php", loginInfo)
-    //let response = JSON.parse(postObj)
-
-    if (xhr.response.error !== "" && postObj.status === 200) {
-        userInput.classList.add("is-invalid")
-        passInput.classList.add("is-invalid")
-        userLogMsg.innerHTML = response.error;
-
-    } else if (xhr.status !== 200) {
-        userInput.classList.add("is-invalid")
-        passInput.classList.add("is-invalid")
-        userLogMsg.innerHTML = "Login error, please try again.";
-        passLogMsg.innerHTML = "Login error, please try again.";
-
-    } else {
-        userInput.classList.add("is-valid")
-        passInput.classList.add("is-valid")
-        userLogMsg.innerHTML = "Login error, please try again.";
-        passLogMsg.innerHTML = "Login error, please try again.";
-    }
-    event.stopPropagation();
-    loginForm.classList.add('was-validated');
-    // console.log(loginResult);
-}
-*/
 
 function registerSubmit(event) {
     event.preventDefault();
@@ -138,47 +87,12 @@ function registerSubmit(event) {
 
     } else {
         let regInfo = getRegInfo()
-        //console.log(regInfo)
+        console.log(regInfo)
         postJSON(urlBase + "/API/Register.php", regInfo, "reg", event)
     }
     event.stopPropagation();
     regForm.classList.add('was-validated');
 }
-
-/*
-function userRegister(event, post){
-    event.preventDefault();
-    //let regInfo = getRegInfo()
-    console.log(xhr.status)
-    console.log(xhr.response)
-
-    let userInput = document.getElementById("regUser");
-    let passInput = document.getElementById("regPass");
-
-    let userValMsg = document.getElementById("regUserMsg")
-    let passValMsg = document.getElementById("regPassValMsg")
-
-    //let postObj = postJSON(urlBase + "/API/Register.php", regInfo)
-    //let response = JSON.parse(postObj)
-
-    if (xhr.response.error !== "" && postObj.status === 200) {
-        userInput.classList.add("is-invalid")
-        userValMsg.innerHTML = response.error;
-
-    } else if (xhr.status !== 200){
-        userInput.classList.add("is-invalid")
-        userValMsg.innerHTML = "Registration error."
-        passValMsg.innerHTML = "Registration error."
-
-    } else {
-        userInput.classList.add("is-valid")
-        userValMsg.innerHTML = "Registration Successful."
-        passValMsg.innerHTML = "Registration Successful."
-    }
-    event.stopPropagation();
-    regForm.classList.add('was-validated');
-}*/
-
 
 function postJSON(url, json_data, submitType, event) {
     let xhr = new XMLHttpRequest();
@@ -187,20 +101,19 @@ function postJSON(url, json_data, submitType, event) {
     xhr.responseType = "json";
     console.log(json_data)
     xhr.send(JSON.stringify(json_data));
-    //var postRespons
 
     event.preventDefault();
-    xhr.onload = function () { // myCallback(xhr.status, xhr.response)
-        //xhr.onload = //const status = xhr.status
+    xhr.onload = function () {
+        let date = new Date();
+        let data = xhr.response
+
         if (submitType === "reg") {
             let userInput = document.getElementById("regUser");
-            //let passInput = document.getElementById("regPass");
 
             let userValMsg = document.getElementById("regUserMsg")
             let passValMsg = document.getElementById("regPassValMsg")
 
             if (xhr.status === 200){
-                //let regInfo = getRegInfo()
                 console.log(xhr.status)
                 console.log(xhr.response)
 
@@ -219,38 +132,34 @@ function postJSON(url, json_data, submitType, event) {
                 passValMsg.innerHTML = "Registration error."
             }
             regForm.classList.add('was-validated');
-            //return true;
-            //} else {
-            //  myCallback(status, xhr.response);
-            //return false;
-            //}
-            //postResponse = JSON.stringify(xhr)
+
         } else {
-            let userInput = document.getElementById("loginUser");
+            let userInput = document.getElementById("loginUser")
             let passInput = document.getElementById("loginPass")
 
             let userLogMsg = document.getElementById("userValMsg")
             let passLogMsg = document.getElementById("passValMsg")
-
             if (xhr.status === 200){
-                //let loginInfo = getLoginInfo()
-                //console.log(JSON.stringify(loginInfo));
                 console.log(xhr.status)
                 console.log(xhr.response)
-
-                //let postObj = postJSON(urlBase + "/API/Login.php", loginInfo)
-                //let response = JSON.parse(postObj)
 
                 if (xhr.response.error !== "") {
                     userInput.classList.add("is-invalid")
                     passInput.classList.add("is-invalid")
                     userLogMsg.innerHTML = xhr.response.error;
+                    passLogMsg.innerHTML = xhr.response.error;
 
                 } else {
                     userInput.classList.add("is-valid")
                     passInput.classList.add("is-valid")
                     userLogMsg.innerHTML = "Login success!";
                     passLogMsg.innerHTML = "Login success!";
+
+                    date.setTime(date.getTime()+(20*60*1000));
+                    document.cookie = "firstName=" + data.firstName +
+                        ";lastName=" + data.lastName +
+                        ";userId=" + data.id +
+                        ";expires=" + date.toUTCString();
                 }
             } else {
                 userInput.classList.add("is-invalid")
@@ -260,21 +169,47 @@ function postJSON(url, json_data, submitType, event) {
             }
             loginForm.classList.add('was-validated');
         }
-        //    xhr.onload = userLogin(event, xhr)
-        //console.log(xhr.status)
-        //console.log(xhr.response)
-        //}
     };
     event.stopPropagation();
-    //let responseObj = JSON.parse(xhr.responseText)
-    //console.log(postResponse)
-    //return postResponse
 }
 
-function myCallback(status, data) {
-    console.log(status);
-    console.log(data);
+function myCallback(response) {
 }
 
-makeEventListeners()
+function readCookie() {
+    userId = -1;
+    let data = document.cookie;
+    let splits = data.split(";");
+
+    for(var i = 0; i < splits.length; i++) {
+        let thisOne = splits[i].trim();
+        let tokens = thisOne.split("=");
+        if( tokens[0] === "firstName" ) {
+            firstName = tokens[1];
+        }
+        else if( tokens[0] === "lastName" ) {
+            lastName = tokens[1];
+        }
+        else if( tokens[0] === "userId" ) {
+            userId = parseInt( tokens[1].trim() );
+        }
+    }
+
+    if( userId < 0 ) {
+        return false
+    } else {
+        return true
+        //document.getElementById("userName").innerHTML = "Logged in as " + firstName + " " + lastName;
+    }
+}
+
+// makeEventListeners()
+
+function doLogout() {
+    userId = 0;
+    firstName = "";
+    lastName = "";
+    document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+    window.location.href = "index.html";
+}
 
