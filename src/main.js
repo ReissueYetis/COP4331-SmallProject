@@ -251,6 +251,7 @@ function postJSON(url, json_data, submitType, event) {
                     passInput.classList.add("is-valid")
                     userLogMsg.innerHTML = "Login success!";
                     passLogMsg.innerHTML = "Login success!";
+                    document.getElementById("content").innerHTML = "";
 
 
                 }
@@ -259,7 +260,6 @@ function postJSON(url, json_data, submitType, event) {
                 passInput.classList.add("is-invalid")
                 userLogMsg.innerHTML = "Login error, please try again.";
                 passLogMsg.innerHTML = "Login error, please try again.";
-                document.getElementById("content").innerHTML = "";
             }
 
             loginForm.classList.add('was-validated');
