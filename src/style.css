@@ -7,6 +7,9 @@
 h1{
     font-size: 150px;
 }
+h2{
+    font-size: 50px;
+}
 body{
     height:100%;
 }
@@ -16,6 +19,18 @@ body{
     background-color:whitesmoke;
     border-radius:25px;
 
+}
+.btn-light{
+    background-color: #D4E8F3;
+}
+.btn-settings{
+    background-color: #66BAEB;
+    outline-color: blue;
+    min-width: 100%;
+}
+.btn-add{
+    min-width: 100%;
+    background-color:#D4E8F3;
 }
 #loginForm{
     align-self: center;
