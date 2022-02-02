@@ -21,7 +21,7 @@
                     </div>
                     <div class ="row justify-content">
                         <div class="col-6">
-                            <button class = "btn btn-add">+</button>
+                            <button class = "btn btn-add" type="button" data-bs-toggle="modal" data-bs-target="#addConModal">+</button>
                         </div>
                         <div class="col-6">
                             <button class = "btn btn-settings ">Settings</button>
@@ -35,10 +35,59 @@
                             <button class = "btn btn-add">&gt</button>
                         </div>
                     </div>
+
+                    <!-- Add user modal-->
+                    <div class="modal" tabindex="-1" id="addConModal" aria-labelledby="addConModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">New Contact</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="addConForm" class="p-2 needs-validation" novalidate>
+                                        <div class="row mb-3 gx-3">
+                                            <div class="col">
+                                                <label for="addFName">First Name</label>
+                                                <input type="text" name="addFName" id="addFName" class="form-control form-control-lg" placeholder="Enter First Name" >
+                                                <div class="invalid-feedback"></div>
+                                            </div>
+                                            <div class="col">
+                                                <label for="addLName">Last Name</label>
+                                                <input type="text" name="addLName" id="addLName" class="form-control form-control-lg" placeholder="Enter Last Name" >
+                                                <div class="invalid-feedback"></div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="addEmail">E-mail Address</label>
+                                            <input type="email" name="addEmail" id="addEmail" class="form-control form-control-lg" placeholder="Enter E-mail" >
+                                            <div class="invalid-feedback"></div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="addPhone">Phone Number</label>
+                                            <input type="tel" name="addPhone" id="addPhone" class="form-control form-control-lg" placeholder="Enter Phone Number" >
+                                            <div class="invalid-feedback"></div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="submit" value="Add User" class="btn btn-primary btn-block btn-lg" id="addConBtn">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
         </div>
-
     </body>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="sha256.js"></script>
+    <script src="main.js"></script>
+    <script src="contacts.js"></script>
 </html>

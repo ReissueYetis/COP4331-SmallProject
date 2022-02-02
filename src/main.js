@@ -1,4 +1,14 @@
-var urlBase = 'https://cop4331.acobble.io';
+const urlBase = 'https://cop4331.acobble.io/';
+const extension = ".php"
+const API = {
+    login: "Login.php",
+    register: "Register.php",
+    addCon: "AddContact.php",
+    delCon: "DeleteContact.php",
+    editCon: "EditContact.php",
+    searchCon: "SearchContact.php"
+}
+
 
 let userId = 0;
 let firstName = "";
@@ -10,12 +20,17 @@ const loginForm = document.getElementById("loginForm");
 let isPasswordMatch = false;
 const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}/;
 
-const badLoginMsg = "Username or password not recognized";
-const badPassMsg = "Password Requirements:<ul><li>Must contain a number, a special character, an uppercase letter, and a lower case letter</li><li>Is at least 8 characters long</li></ul>";
-const passMismatch = "Passwords do not match";
-const noPassEntered = "Please enter a password."
-const noUsername = "Please enter a username."
-const badRegMsg = "Username already exists"
+const valMsg = {
+    badLoginMsg : "Username or password not recognized",
+    userExist : "Username already exists",
+    badPassMsg : "Password Requirements:<ul><li>Must contain a number, a special character, an uppercase letter, and a lower case letter</li><li>Is at least 8 characters long</li></ul>",
+    passMismatch : "Passwords do not match",
+    noUser : "Please enter a username.",
+    noPass : "Please enter a password.",
+    noFName: "Please enter first name",
+    noLName: "Please enter last name"
+
+}
 
 function hashPass(password){
     return sha256(password)
@@ -44,42 +59,53 @@ function getRegInfo(){
 
 function loginSubmit(event) {
     event.preventDefault();
+    // loginForm.classList.remove('was-validated');
 
     if (!loginForm.checkValidity()) {//!userInput.checkValidity() || !passInput.checkValidity()
         event.stopPropagation();
-        loginForm.classList.add('was-validated');
+        // loginForm.classList.add('was-validated');
     }
     else {
         let loginInfo = getLoginInfo()
         console.log(loginInfo)
         postJSON("https://cop4331.acobble.io/API/Login.php", loginInfo, "log", event)
+        if (readCookie()){
+            window.location.href = "home.html";
+        }
     }
-    if (readCookie()){
-        window.location.href = "contactsPage.html";
-    }
+    loginForm.classList.add('was-validated');
 }
 
 function registerSubmit(event) {
     event.preventDefault();
+    regForm.classList.remove('was-validated');
 
     let userInput = document.getElementById("regUser");
 
     const formData = new FormData(regForm);
     const password = formData.get("regPass").toString();
-    const repeatPassword = formData.get("regRepeatPass");
+    const repeatPassword = formData.get("regRepeatPass").toString();
+    // console.log(password + " ," + repeatPassword)
 
     isPasswordMatch = password === repeatPassword;
     if (userInput.value === ""){
         document.getElementById("regUserMsg").innerHTML = noUsername;
+        regForm.classList.add('is-invalid');
     }
-    if (password === "") {
+    if (password !== "" && !passwordPattern.test(password)){
+        document.getElementById("regPassValMsg").innerHTML = badPassMsg;
+        document.getElementById("repeatPassMsg").innerHTML = "";
+        regForm.classList.add('is-invalid');
+    }
+    else if (password === "") {
+        console.log("why why why ")
         document.getElementById("regPassValMsg").innerHTML = noPassEntered;
 
         if(repeatPassword === "") {
             document.getElementById("repeatPassMsg").innerHTML = noPassEntered;
         }
-
-    } else if (!isPasswordMatch) {
+        regForm.classList.add('is-invalid');
+    } else if (!isPasswordMatch && repeatPassword !== "") {
         document.getElementById("regPassValMsg").innerHTML = passMismatch;
         document.getElementById("repeatPassMsg").innerHTML = passMismatch;
 
@@ -133,7 +159,8 @@ function postJSON(url, json_data, submitType, event) {
             }
             regForm.classList.add('was-validated');
 
-        } else {
+        }
+        else {
             let userInput = document.getElementById("loginUser")
             let passInput = document.getElementById("loginPass")
 
@@ -144,6 +171,7 @@ function postJSON(url, json_data, submitType, event) {
                 console.log(xhr.response)
 
                 if (xhr.response.error !== "") {
+                    loginForm.classList.remove('was-validated');
                     userInput.classList.add("is-invalid")
                     passInput.classList.add("is-invalid")
                     userLogMsg.innerHTML = xhr.response.error;
@@ -162,6 +190,7 @@ function postJSON(url, json_data, submitType, event) {
                         ";expires=" + date.toUTCString();
                 }
             } else {
+                loginForm.classList.remove('was-validated');
                 userInput.classList.add("is-invalid")
                 passInput.classList.add("is-invalid")
                 userLogMsg.innerHTML = "Login error, please try again.";
@@ -213,3 +242,61 @@ function doLogout() {
     window.location.href = "index.html";
 }
 
+// $(function() {
+//     loginForm.validate({
+//         rules: {
+//             loginUser: "required",
+//             loginPass: "required",
+//         },
+//         messages: {
+//             loginUser: "BOI WAT DA HELL BOI"
+//         }
+//     })
+// })
+
+$(function() {
+    $.validator.addMethod("strongPass", function(value, element) {
+        return passwordPattern.test(value)
+    })
+
+    $("#regForm").validate({
+        rules: {
+            regFName: "required",
+            regLName: "required",
+            regUser: "required",
+            regPass: {
+                required: true,
+                strongPass: true
+            },
+            regRepeatPass: {
+                required: true,
+                equalTo: "#regPass"
+            }
+        },
+        messages: {
+            regFName: valMsg.noFName,
+            regLName: valMsg.noLName,
+            regUser: valMsg.noUser,
+            regPass: {
+                required: valMsg.noPass,
+                strongPass: valMsg.badPassMsg
+            },
+            regRepeatPass: {
+                required: valMsg.noPass,
+                equalTo: valMsg.passMismatch
+            }
+        }
+    });
+})
+
+
+
+$.validator.setDefaults({
+    errorClass: "is-invalid",
+
+    validClass: "is-valid",
+
+    errorPlacement: function(error, element){
+        $(element).next().append(error)
+    }
+});
