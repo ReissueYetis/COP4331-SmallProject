@@ -30,7 +30,6 @@ const valMsg = {
     noPass : "Please enter a password.",
     noFName: "Please enter first name",
     noLName: "Please enter last name"
-
 }
 
 function hashPass(password){
@@ -203,7 +202,22 @@ function postJSON(url, json_data, submitType, event) {
     event.stopPropagation();
 }
 
-function myCallback(response) {
+function myCallback(response, form, endPoint) {
+    console.log(response)
+    switch (endPoint){
+        case API.register:
+
+        case API.login:
+
+        case API.delAcc:
+
+        case API.addCon:
+
+        case API.delCon:
+
+        case API.editCon:
+
+    }
 }
 
 function readCookie() {
@@ -244,26 +258,26 @@ function doLogout() {
 }
 
 function postHandler(form, password ,endPoint) {
-    if (password){
-
-    }
-
     let formData = {}
     formData = form.serializeArray().map(function (x) {
         formData[x.name] = x.value
     });
+
+    if (endPoint === API.login){
+        formData.password = sha256(form.regPass)
+    } else if (endPoint === API.register){
+        formData.password = sha256(form.loginPass)
+    } else if (endPoint === API.delAcc){
+        formData.password = sha256(form.passDel)
+    }
+
     $.ajax({
         url: urlBase + endPoint,
         data: formData,
         type: "POST",
         dataType: "json",
         success: function (response) {
-            console.log(response)
-            if (response.error === "") {
-
-            } else {
-
-            }
+            myCallback(response, form, endPoint)
         }
     })
 }
