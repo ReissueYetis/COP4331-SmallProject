@@ -41,11 +41,12 @@ function hashPass(password){
 //     makeRegEventListeners()
 // }
 
-function getLoginInfo(){
-    let login = document.getElementById("loginUser").value
-    let password = sha256(document.getElementById("loginPass").value)
-    //let password = document.getElementById("loginPass").value
-    return {login,password}
+function getLoginInfo(form){
+    let formData = form.serializeArray().map(function (x) {
+        form[x.name] = x.value
+    });
+    formData.password = sha256(formData.password)
+    return formData
 }
 
 function getRegInfo(){
@@ -202,22 +203,135 @@ function postJSON(url, json_data, submitType, event) {
     event.stopPropagation();
 }
 
+$("#loginForm").on("submit", function(event){
+    event.preventDefault()
+    let data = getLoginInfo(this)
+    postHandler(this, data ,API.login)
+})
+
+// $("#regForm").on("submit", function(event){})
+
 function myCallback(response, form, endPoint) {
-    console.log(response)
+    console.log(response, "in myCallBack")
     switch (endPoint){
-        case API.register:
-
-        case API.login:
-
-        case API.delAcc:
-
-        case API.addCon:
-
-        case API.delCon:
-
-        case API.editCon:
-
+        case API.register: {
+            $("#postResponse").val = response.error
+            return
+        }
+        case API.login: {
+            return
+        }
+        case API.delAcc:{
+            return
+        }
+        case API.addCon:{
+            return
+        }
+        case API.delCon:{
+            return
+        }
+        case API.editCon:{
+            return
+        }
     }
+}
+// makeEventListeners()
+
+$(function() {
+    $.validator.addMethod("strongPass", function(value, element) {
+        return passwordPattern.test(value)
+    })
+
+    $("#loginForm").validate({
+        rules: {
+            loginUser: "required",
+            loginPass: "required",
+        },
+        messages: {
+            loginUser: valMsg.noUser,
+            loginPass: valMsg.noPass
+        }
+    })
+
+    $("#regForm").validate({
+        submitHandler: function(form, event) {
+            event.preventDefault()
+            let data = getRegInfo()
+            $.ajax({
+                url: urlBase + API.register,
+                data: data,
+                type: "POST",
+                dataType: "json",
+                success: function (response) {
+                    myCallback(response, $("#regForm"), API.login)
+                    form.classList.add("was-validated")
+                },
+                error: function (xhr, textStatus){
+                    console.log("fail", xhr, +textStatus,
+                    $("#postResponse").val("Registration failed, please try again"))
+                }
+            })
+            // }).done(function (response) {
+            //     myCallback(response, $("#regForm"), API.login)
+            // }).fail(function (xhr, textStatus){
+            //     console.log("fail", xhr, +textStatus)
+            //     $("#postResponse").val("Registration failed, please try again").addClass("is-invalid")
+            // })
+        },
+        rules: {
+            regFName: "required",
+            regLName: "required",
+            regUser: {
+                required: true,
+            },
+            regPass: {
+                required: true,
+                strongPass: true
+            },
+            regRepeatPass: {
+                required: true,
+                equalTo: "#regPass"
+            },
+            postResponse: {
+                equalTo: ""
+            }
+        },
+        messages: {
+            regFName: valMsg.noFName,
+            regLName: valMsg.noLName,
+            regUser: valMsg.noUser,
+            regPass: {
+                required: valMsg.noPass,
+                strongPass: valMsg.badPassMsg
+            },
+            regRepeatPass: {
+                required: valMsg.noPass,
+                equalTo: valMsg.passMismatch
+            },
+            postResponse: {
+                equalTo: "Registration failed, please try again"
+            }
+
+        }
+    });
+})
+
+$.validator.setDefaults({
+    errorClass: "is-invalid",
+
+    validClass: "is-valid",
+
+    errorPlacement: function(error, element){
+        $(element).next().append(error)
+    }
+});
+
+function doLogout() {
+    userId = 0;
+    firstName = "";
+    lastName = "";
+    document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+    window.location.href = "index.html";
 }
 
 function readCookie() {
@@ -246,107 +360,3 @@ function readCookie() {
         //document.getElementById("userName").innerHTML = "Logged in as " + firstName + " " + lastName;
     }
 }
-
-// makeEventListeners()
-
-function doLogout() {
-    userId = 0;
-    firstName = "";
-    lastName = "";
-    document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-    window.location.href = "index.html";
-}
-
-function postHandler(form, password ,endPoint) {
-    let formData = {}
-    formData = form.serializeArray().map(function (x) {
-        formData[x.name] = x.value
-    });
-
-    if (endPoint === API.login){
-        formData.password = sha256(form.regPass)
-    } else if (endPoint === API.register){
-        formData.password = sha256(form.loginPass)
-    } else if (endPoint === API.delAcc){
-        formData.password = sha256(form.passDel)
-    }
-
-    $.ajax({
-        url: urlBase + endPoint,
-        data: formData,
-        type: "POST",
-        dataType: "json",
-        success: function (response) {
-            myCallback(response, form, endPoint)
-        }
-    })
-}
-
-$(function() {
-    $.validator.addMethod("strongPass", function(value, element) {
-        return passwordPattern.test(value)
-    })
-
-    $("#loginForm").validate({
-        rules: {
-            loginUser: "required",
-            loginPass: "required",
-        },
-        messages: {
-            loginUser: valMsg.noUser,
-            loginPass: valMsg.noPass
-        }
-    })
-
-    $("#regForm").validate({
-        submitHandler: function(form) {
-            postHandler(this, API.register)
-        },
-
-        rules: {
-            regFName: "required",
-            regLName: "required",
-            regUser: {
-                required: true,
-                remote: {
-                    url: urlBase + API.register,
-                    type: "post",
-                    data: {
-
-                    }
-                }
-            },
-            regPass: {
-                required: true,
-                strongPass: true
-            },
-            regRepeatPass: {
-                required: true,
-                equalTo: "#regPass"
-            }
-        },
-        messages: {
-            regFName: valMsg.noFName,
-            regLName: valMsg.noLName,
-            regUser: valMsg.noUser,
-            regPass: {
-                required: valMsg.noPass,
-                strongPass: valMsg.badPassMsg
-            },
-            regRepeatPass: {
-                required: valMsg.noPass,
-                equalTo: valMsg.passMismatch
-            }
-        }
-    });
-})
-
-$.validator.setDefaults({
-    errorClass: "is-invalid",
-
-    validClass: "is-valid",
-
-    errorPlacement: function(error, element){
-        $(element).next().append(error)
-    }
-});
