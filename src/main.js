@@ -215,7 +215,13 @@ function myCallback(response, form, endPoint) {
     console.log(response, "in myCallBack")
     switch (endPoint){
         case API.register: {
-            $("#postResponse").val = response.error
+            if (response.error === "") {
+                $("#regRepeatPass").addClass("is-valid")
+                $("#repeatPassMsg").addClass("valid-feedback").text("Registration Success")
+            }else{
+                $("#regRepeatPass").addClass("is-invalid")
+                $("#repeatPassMsg").addClass("invalid-feedback").text(response.error)
+            }
             return
         }
         case API.login: {
@@ -267,10 +273,12 @@ $(function() {
                     form.classList.add("was-validated")
                 },
                 error: function (xhr, textStatus){
-                    console.log("fail", xhr, +textStatus,
-                    $("#postResponse").val("Registration failed, please try again"))
+                    console.log("fail", xhr, +textStatus)
+                    $("#regRepeatPass").addClass("is-invalid")
+                    $("#regSuccess").addClass("invalid-feedback").text("Registration failed, please try again")
                 }
             })
+            form.classList.add("was-validated")
             // }).done(function (response) {
             //     myCallback(response, $("#regForm"), API.login)
             // }).fail(function (xhr, textStatus){
