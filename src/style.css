@@ -24,13 +24,13 @@ body{
     background-color: #D4E8F3;
 }
 .btn-settings{
-    background-color: #66BAEB;
-    outline-color: blue;
+    background-color: #77c4d1;
+    outline-color: #bccbd4;
     min-width: 100%;
 }
 .btn-add{
     min-width: 100%;
-    background-color:#D4E8F3;
+    background-color:#8fb2b8;
 }
 #loginForm{
     align-self: center;
@@ -63,4 +63,25 @@ body{
 .row{
     --bs-gutter-x:0 rem;
     padding: 0;
+}
+.contact{
+    background-color:#def3ff;
+}
+.contactNameText{
+    font-size:40px;
+
+    margin-left: 15px;
+
+}
+.contactExtendButton{
+    font-size:40px;
+
+}
+.contactInfoText{
+    margin-left:15px;
+    font-size:30px;
+}
+.editContactButton{
+    font-size:30px;
+    background-color: palegreen;
 }
