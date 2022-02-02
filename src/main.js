@@ -3,6 +3,7 @@ const extension = ".php"
 const API = {
     login: "Login.php",
     register: "Register.php",
+    delAcc: "DeleteAccount.php",
     addCon: "AddContact.php",
     delCon: "DeleteContact.php",
     editCon: "EditContact.php",
@@ -242,28 +243,65 @@ function doLogout() {
     window.location.href = "index.html";
 }
 
-// $(function() {
-//     loginForm.validate({
-//         rules: {
-//             loginUser: "required",
-//             loginPass: "required",
-//         },
-//         messages: {
-//             loginUser: "BOI WAT DA HELL BOI"
-//         }
-//     })
-// })
+function postHandler(form, password ,endPoint) {
+    if (password){
+
+    }
+
+    let formData = {}
+    formData = form.serializeArray().map(function (x) {
+        formData[x.name] = x.value
+    });
+    $.ajax({
+        url: urlBase + endPoint,
+        data: formData,
+        type: "POST",
+        dataType: "json",
+        success: function (response) {
+            console.log(response)
+            if (response.error === "") {
+
+            } else {
+
+            }
+        }
+    })
+}
 
 $(function() {
     $.validator.addMethod("strongPass", function(value, element) {
         return passwordPattern.test(value)
     })
 
+    $("#loginForm").validate({
+        rules: {
+            loginUser: "required",
+            loginPass: "required",
+        },
+        messages: {
+            loginUser: valMsg.noUser,
+            loginPass: valMsg.noPass
+        }
+    })
+
     $("#regForm").validate({
+        submitHandler: function(form) {
+            postHandler(this, API.register)
+        },
+
         rules: {
             regFName: "required",
             regLName: "required",
-            regUser: "required",
+            regUser: {
+                required: true,
+                remote: {
+                    url: urlBase + API.register,
+                    type: "post",
+                    data: {
+
+                    }
+                }
+            },
             regPass: {
                 required: true,
                 strongPass: true
@@ -288,8 +326,6 @@ $(function() {
         }
     });
 })
-
-
 
 $.validator.setDefaults({
     errorClass: "is-invalid",

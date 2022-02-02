@@ -66,25 +66,25 @@
                         <div class="form-group row">
                             <div class="col">
                                 <label for="regFName">First Name</label>
-                                <input type="Text" class="form-control" id="regFName" placeholder="First Name" required>
-                                <div class="invalid-feedback" id="fNameVal">Please enter your first name</div>
+                                <input type="Text" class="form-control" id="regFName" name="regFName" placeholder="First Name">
+                                <div class="invalid-feedback" id="fNameVal"></div>
                             </div>
                             <div class="col">
                                 <label for="regLName">First Name</label>
-                                <input type="Text" class="form-control" id="regLName" placeholder="Last Name" required>
-                                <div class="invalid-feedback" id="lNameMsg">Please enter your last name</div>
+                                <input type="Text" class="form-control" id="regLName" name="regLName" placeholder="Last Name" >
+                                <div class="invalid-feedback" id="lNameMsg"></div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="regUser">Username</label>
-                            <input type="text" class="form-control" id="regUser" aria-describedby="name" placeholder="Enter Username" required>
+                            <input type="text" class="form-control" id="regUser" name="regUser" aria-describedby="name" placeholder="Enter Username" >
                             <div class="invalid-feedback" id="regUserMsg"></div>
                         </div>
                         <div class="form-group">
                             <label for="regPass" class="form-label">Password</label>
                             <input type="password" name="regPass" id="regPass"
                                    class="form-control" placeholder="Password"
-                                   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}" required
+                                   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}"
                             >
                             <div class="invalid-feedback" id="regPassValMsg"></div>
                         </div>
@@ -93,7 +93,7 @@
                             <input
                                     type="password" name="regRepeatPass" id="regRepeatPass"
                                     class="form-control" placeholder="Password"
-                                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}" required
+                                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}"
                             >
                             <div class="invalid-feedback" id="repeatPassMsg"></div>
                             <div class="valid-feedback" id="regSuccess"></div>
