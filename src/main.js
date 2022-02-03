@@ -20,16 +20,22 @@ const loginForm = document.getElementById("loginForm");
 
 let isPasswordMatch = false;
 const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}/;
+const phonePattern = /^[0-9]{3}-[0-9]{3}-[0-9]{4}$/;
 
 const valMsg = {
-    badLoginMsg : "Username or password not recognized",
+    // badLoginMsg : "Username or password not recognized",
     userExist : "Username already exists",
     badPassMsg : "Password Requirements:<ul><li>Must contain a number, a special character, an uppercase letter, and a lower case letter</li><li>Is at least 8 characters long</li></ul>",
     passMismatch : "Passwords do not match",
     noUser : "Please enter a username.",
     noPass : "Please enter a password.",
     noFName: "Please enter first name",
-    noLName: "Please enter last name"
+    noLName: "Please enter last name",
+    noEmail: "Please enter an E-mail",
+    badPhone: "Please enter a valid phone number",
+    regErr: "Registration failed, please try again",
+    logErr: "Login failed, please try again",
+    accDelErr: "Account deletion failed, please try again"
 }
 
 function hashPass(password){
@@ -42,10 +48,10 @@ function hashPass(password){
 // }
 
 function getLoginInfo(form){
-    let formData = form.serializeArray().map(function (x) {
-        form[x.name] = x.value
-    });
+    let formData = {}
+    form.serializeArray().map(function(x){formData[x.name] = x.value;});
     formData.password = sha256(formData.password)
+    console.log(formData)
     return formData
 }
 
@@ -131,7 +137,6 @@ function postJSON(url, json_data, submitType, event) {
 
     event.preventDefault();
     xhr.onload = function () {
-        let date = new Date();
         let data = xhr.response
 
         if (submitType === "reg") {
@@ -184,11 +189,6 @@ function postJSON(url, json_data, submitType, event) {
                     userLogMsg.innerHTML = "Login success!";
                     passLogMsg.innerHTML = "Login success!";
 
-                    date.setTime(date.getTime()+(20*60*1000));
-                    document.cookie = "firstName=" + data.firstName +
-                        ";lastName=" + data.lastName +
-                        ";userId=" + data.id +
-                        ";expires=" + date.toUTCString();
                 }
             } else {
                 loginForm.classList.remove('was-validated');
@@ -203,45 +203,74 @@ function postJSON(url, json_data, submitType, event) {
     event.stopPropagation();
 }
 
-$("#loginForm").on("submit", function(event){
-    event.preventDefault()
-    let data = getLoginInfo(this)
-    postHandler(this, data ,API.login)
-})
+// $("#loginForm").on("submit", function(event){
+//     event.preventDefault()
+//     let data = getLoginInfo(this)
+//     postHandler(this, data ,API.login)
+// })
 
 // $("#regForm").on("submit", function(event){})
 
-function myCallback(response, form, endPoint) {
-    console.log(response, "in myCallBack")
-    switch (endPoint){
-        case API.register: {
-            if (response.error === "") {
-                $("#regRepeatPass").addClass("is-valid")
-                $("#repeatPassMsg").addClass("valid-feedback").text("Registration Success")
-            }else{
-                $("#regRepeatPass").addClass("is-invalid")
-                $("#repeatPassMsg").addClass("invalid-feedback").text(response.error)
+function postHandler(data, form, endPoint) {
+    $.ajax({
+        url: urlBase + endPoint,
+        data: data,
+        type: "POST",
+        dataType: "json",
+    }).always(function (xhr, status){
+        console.log(xhr.response)
+        switch (endPoint) {
+            case API.register: {
+                if (status === "error") {
+                    $("#regFail").removeClass("collapse").text(valMsg.regErr)
+                } else {
+                    if (xhr.response.error === ""){
+                        $("#regSucc").removeClass("collapse")
+                    } else {
+                        $("#regFail").removeClass("collapse").text(valMsg.userExist)
+                    }
+                }
+                return
             }
-            return
+            case API.login: {
+                if (status === "error") {
+                    $("#loginFail").removeClass("collapse").text(valMsg.regErr)
+                } else {
+                    if (xhr.response.error === ""){
+                        $("#loginSucc").removeClass("collapse").text(valMsg.regErr)
+                        saveCookie(data)
+                    } else {
+                        $("#loginFail").removeClass("collapse").text(xhr.response.error)
+                    }
+                }
+                return
+            }
+            case API.delAcc: {
+                if (status === "error") {
+                    $("#regFailed").removeClass("collapse").text(valMsg.accDelErr)
+                } else {
+                    if (xhr.response.error === ""){
+                        $("#regFail").removeClass("collapse")
+                    } else {
+                        $("#regAlert").removeClass("collapse").text(xhr.response.error)
+                    }
+                }
+                return
+            }
         }
-        case API.login: {
-            return
-        }
-        case API.delAcc:{
-            return
-        }
-        case API.addCon:{
-            return
-        }
-        case API.delCon:{
-            return
-        }
-        case API.editCon:{
-            return
-        }
-    }
+    })
 }
 // makeEventListeners()
+
+$("#loginForm").keydown(function(){
+    $("#loginFail").addClass("collapse")
+    $("#loginSucc").addClass("collapse")
+})
+
+$("#regForm").keydown("keydown", function(){
+    $("#regFail").addClass("collapse")
+    $("#regSucc").addClass("collapse")
+})
 
 $(function() {
     $.validator.addMethod("strongPass", function(value, element) {
@@ -249,6 +278,13 @@ $(function() {
     })
 
     $("#loginForm").validate({
+        submitHandler: function(form, event) {
+            $("#loginFail").addClass("collapse")
+            $("#loginSucc").addClass("collapse")
+            event.preventDefault()
+
+            postHandler(getLoginInfo($("#loginForm")), form, API.login)
+        },
         rules: {
             loginUser: "required",
             loginPass: "required",
@@ -261,30 +297,11 @@ $(function() {
 
     $("#regForm").validate({
         submitHandler: function(form, event) {
+            $("#regFail").addClass("collapse")
+            $("#regSucc").addClass("collapse")
             event.preventDefault()
             let data = getRegInfo()
-            $.ajax({
-                url: urlBase + API.register,
-                data: data,
-                type: "POST",
-                dataType: "json",
-                success: function (response) {
-                    myCallback(response, $("#regForm"), API.login)
-                    form.classList.add("was-validated")
-                },
-                error: function (xhr, textStatus){
-                    console.log("fail", xhr, +textStatus)
-                    $("#regRepeatPass").addClass("is-invalid")
-                    $("#regSuccess").addClass("invalid-feedback").text("Registration failed, please try again")
-                }
-            })
-            form.classList.add("was-validated")
-            // }).done(function (response) {
-            //     myCallback(response, $("#regForm"), API.login)
-            // }).fail(function (xhr, textStatus){
-            //     console.log("fail", xhr, +textStatus)
-            //     $("#postResponse").val("Registration failed, please try again").addClass("is-invalid")
-            // })
+            postHandler(data, form, API.register)
         },
         rules: {
             regFName: "required",
@@ -341,6 +358,14 @@ function doLogout() {
     document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
     window.location.href = "index.html";
 }
+function saveCookie(data) {
+    let date = new Date();
+    date.setTime(date.getTime()+(20*60*1000));
+    document.cookie = "userId=" + data.id +
+        ";firstName=" + data.firstName +
+        ";lastName=" + data.lastName +
+        ";expires=" + date.toUTCString();
+}
 
 function readCookie() {
     userId = -1;
@@ -350,21 +375,14 @@ function readCookie() {
     for(var i = 0; i < splits.length; i++) {
         let thisOne = splits[i].trim();
         let tokens = thisOne.split("=");
-        if( tokens[0] === "firstName" ) {
+        if (tokens[0] === "firstName") {
             firstName = tokens[1];
-        }
-        else if( tokens[0] === "lastName" ) {
+        } else if (tokens[0] === "lastName") {
             lastName = tokens[1];
-        }
-        else if( tokens[0] === "userId" ) {
-            userId = parseInt( tokens[1].trim() );
+        } else if (tokens[0] === "userId") {
+            userId = parseInt(tokens[1].trim());
         }
     }
+    return userId >= 0;
 
-    if( userId < 0 ) {
-        return false
-    } else {
-        return true
-        //document.getElementById("userName").innerHTML = "Logged in as " + firstName + " " + lastName;
-    }
 }

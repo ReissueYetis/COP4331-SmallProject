@@ -3,11 +3,11 @@ let delConForm = $("#delConForm")
 let editConForm = $("#editConForm")
 let accDelForm = $("#accDelForm")
 
-function getContactInfo() {
-    let firstName = document.getElementById("regFName").value
-    let lastName = document.getElementById("regLName").value
-    let phoneNumber = document.getElementById("regUser").value
-    return {firstName, lastName, phoneNumber, email}
+function getContactInfo(form) {
+    let formData = {}
+
+    formData = $.extend(formData, {id: userId}, form.serializeArray().map(function(x){ {}[x.name] = x.value }))
+    return formData
 }
 
 editConForm.on("submit",  function (event) {
@@ -81,20 +81,55 @@ accDelForm.on("submit", function (event) {
 })
 
 $(function() {
+    $.validator.addMethod("validPhone", function(value, element) {
+        return phonePattern.test(value)
+    })
+
     addConForm.validate({
+        submitHandler: function(form, event) {
+            event.preventDefault()
+            let data = getContactInfo(form)
+            $.ajax({
+                url: urlBase + API.register,
+                data: data,
+                type: "POST",
+                dataType: "json",
+                success: function (response) {
+                    myCallback(response, $("#regForm"), API.register)
+                    form.classList.add("was-validated")
+                },
+                error: function (xhr, textStatus){
+                    console.log("fail", xhr, +textStatus)
+                    $("#regRepeatPass").addClass("is-invalid")
+                    $("#regSuccess").addClass("invalid-feedback").text("Registration failed, please try again")
+                }
+            })
+            form.classList.add("was-validated")
+            // }).done(function (response) {
+            //     myCallback(response, $("#regForm"), API.login)
+            // }).fail(function (xhr, textStatus){
+            //     console.log("fail", xhr, +textStatus)
+            //     $("#postResponse").val("Registration failed, please try again").addClass("is-invalid")
+            // })
+        },
         rules: {
             addFName: "required",
             addLName: "required",
             addEmail: "required",
-            addPhone: "required"
+            addPhone: {
+                validPhone: true
+            }
         },
         messages: {
-            addFName: "BOI WAT DA HELL BOI"
+            addFName: valMsg.noFName,
+            addLName: valMsg.noLName,
+            addEmail: valMsg.noEmail,
+            addPhone: {
+                validPhone: valMsg.badPhone
+            }
         }
     })
-})
 
-$(function() {
     accDelForm.validate({
         rules: {
             accDel: "required",
@@ -107,7 +142,7 @@ $(function() {
     })
     // console.log("yes yes?")
     // accDelForm.classList.add("was-validated")
-});
+})
 
 $.validator.setDefaults({
     errorClass: "is-invalid",
@@ -118,8 +153,3 @@ $.validator.setDefaults({
         $(element).next().append(error)
     }
 });
-//})
-// jQuery unobtrusive validation defaults
-
-    // });
-// });
