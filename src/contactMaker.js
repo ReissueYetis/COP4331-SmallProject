@@ -16,3 +16,10 @@ function fillContactDiv(contact,contactDiv){
   // here we would add the event listener
   contact.appendChild(contactName);
 }
+function getContactInfo(contact){
+  let email = contact.email;
+  let phoneNum = contact.phoneNum;
+  let contactInfoDiv = document.createElement("div");
+  contactInfoDiv.innerHTML = email + "  "+ phoneNum;
+  return contactInfoDiv;
+}
