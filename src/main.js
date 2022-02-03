@@ -1,5 +1,6 @@
 const urlBase = 'https://cop4331.acobble.io/';
 const extension = ".php"
+
 const API = {
     login: "Login.php",
     register: "Register.php",
@@ -10,15 +11,7 @@ const API = {
     searchCon: "SearchContact.php"
 }
 
-
-let userId = 0;
-let firstName = "";
-let lastName = "";
-
-const regForm = document.getElementById("regForm");
-const loginForm = document.getElementById("loginForm");
-
-let isPasswordMatch = false;
+// let isPasswordMatch = false;
 const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}/;
 const phonePattern = /^[0-9]{3}-[0-9]{3}-[0-9]{4}$/;
 
@@ -33,19 +26,16 @@ const valMsg = {
     noLName: "Please enter last name",
     noEmail: "Please enter an E-mail",
     badPhone: "Please enter a valid phone number",
+    regSucc: "Registration Succes!",
     regErr: "Registration failed, please try again",
-    logErr: "Login failed, please try again",
+    loginSucc: "Login Success",
+    loginErr: "Login failed, please try again",
     accDelErr: "Account deletion failed, please try again"
 }
 
-function hashPass(password){
-    return sha256(password)
-}
-
-// function makeEventListeners (){
-//     makeLoginEventListeners()
-//     makeRegEventListeners()
-// }
+let userId = 0;
+let firstName = "";
+let lastName = "";
 
 function getLoginInfo(form){
     let formData = {}
@@ -64,6 +54,167 @@ function getRegInfo(){
     return {firstName, lastName, login, password}
 }
 
+$("#regForm").on("keydown", function(){
+    $("#regAlert").addClass("collapse").removeClass("alert-danger alert-success")
+})
+
+$("#loginForm").on("keydown", function () {
+    $("#loginAlert").addClass("collapse").removeClass("alert-danger alert-success")
+})
+
+$(function() {
+    $("#loginForm").validate({
+        submitHandler: function (form, event) {
+            event.preventDefault()
+            $.ajax({
+                url: urlBase + API.login,
+                data: getLoginInfo($("#loginForm")),
+                type: "POST",
+                dataType: "json",
+            })
+            .done(function (response, status) {
+                if (response.error === "") {
+                    $("#loginAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.loginSucc)
+                    saveCookie(response)
+                } else {
+                    $("#loginAlert").removeClass("collapse alert-success").addClass("alert-danger").text(response.error)
+                }
+            })
+            .fail(function (xhr, status) {
+                $("#loginAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.loginErr)
+            })
+            .always(function(xhr, status){
+                console.log(xhr, status)
+            })
+        },
+        rules: {
+            login: "required",
+            password: "required",
+        },
+        messages: {
+            login: valMsg.noUser,
+            password: valMsg.noPass
+        }
+    })
+})
+
+$(function() {
+    $("#regForm").validate({
+        submitHandler: function(form, event){
+            event.preventDefault()
+            let data = getRegInfo()
+            $.ajax({
+                url: urlBase + API.register,
+                data: data,
+                type: "POST",
+                dataType: "json",
+            })
+            .done(function(response, status){
+                if (response.error === ""){
+                    $("#regAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.regSucc)
+                } else {
+                    $("#regAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.userExist)
+                }
+            })
+            .fail(function(xhr, status){
+                $("#regAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.regErr)
+            })
+            .always(function(xhr, status){
+                    console.log(xhr, status)
+                })
+        },
+        rules: {
+            regFName: "required",
+            regLName: "required",
+            regUser: {
+                required: true,
+            },
+            regPass: {
+                required: true,
+                strongPass: true
+            },
+            regRepeatPass: {
+                required: true,
+                equalTo: "#regPass"
+            },
+            postResponse: {
+                equalTo: ""
+            }
+        },
+        messages: {
+            regFName: valMsg.noFName,
+            regLName: valMsg.noLName,
+            regUser: valMsg.noUser,
+            regPass: {
+                required: valMsg.noPass,
+                strongPass: valMsg.badPassMsg
+            },
+            regRepeatPass: {
+                required: valMsg.noPass,
+                equalTo: valMsg.passMismatch
+            },
+            postResponse: {
+                equalTo: "Registration failed, please try again"
+            }
+
+        }
+    })
+})
+
+function doLogout() {
+    userId = 0;
+    firstName = "";
+    lastName = "";
+    document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+    window.location.href = "index.html";
+}
+function saveCookie(data) {
+    let date = new Date();
+    date.setTime(date.getTime()+(20*60*1000));
+    document.cookie = "id=" + data.id +
+        ";firstName=" + data.firstName +
+        ";lastName=" + data.lastName +
+        ";expires=" + date.toUTCString();
+}
+
+function readCookie(key) {
+    userId = -1;
+    let data = document.cookie;
+    let splits = data.split(";");
+
+    for(var i = 0; i < splits.length; i++) {
+        let thisOne = splits[i].trim();
+        let tokens = thisOne.split("=");
+        if (tokens[0] === "firstName") {
+            firstName = tokens[1];
+        } else if (tokens[0] === "lastName") {
+            lastName = tokens[1];
+        } else if (tokens[0] === "userId") {
+            userId = parseInt(tokens[1].trim());
+        }
+    }
+    return userId >= 0;
+}
+
+$(function() {
+    $.validator.addMethod("strongPass", function (value, element) {
+        return passwordPattern.test(value)
+    })
+})
+$.validator.setDefaults({
+    errorClass: "is-invalid",
+
+    validClass: "is-valid",
+
+    errorPlacement: function(error, element){
+        $(element).next().append(error)
+    }
+});
+
+// const regForm = document.getElementById("regForm");
+// const loginForm = document.getElementById("loginForm");
+
+/*
 function loginSubmit(event) {
     event.preventDefault();
     // loginForm.classList.remove('was-validated');
@@ -82,7 +233,9 @@ function loginSubmit(event) {
     }
     loginForm.classList.add('was-validated');
 }
+*/
 
+/*
 function registerSubmit(event) {
     event.preventDefault();
     regForm.classList.remove('was-validated');
@@ -126,7 +279,9 @@ function registerSubmit(event) {
     event.stopPropagation();
     regForm.classList.add('was-validated');
 }
+*/
 
+/*
 function postJSON(url, json_data, submitType, event) {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
@@ -202,187 +357,13 @@ function postJSON(url, json_data, submitType, event) {
     };
     event.stopPropagation();
 }
+*/
 
-// $("#loginForm").on("submit", function(event){
-//     event.preventDefault()
-//     let data = getLoginInfo(this)
-//     postHandler(this, data ,API.login)
-// })
-
-// $("#regForm").on("submit", function(event){})
-
-function postHandler(data, form, endPoint) {
-    $.ajax({
-        url: urlBase + endPoint,
-        data: data,
-        type: "POST",
-        dataType: "json",
-    }).always(function (xhr, status){
-        console.log(xhr.response)
-        switch (endPoint) {
-            case API.register: {
-                if (status === "error") {
-                    $("#regFail").removeClass("collapse").text(valMsg.regErr)
-                } else {
-                    if (xhr.response.error === ""){
-                        $("#regSucc").removeClass("collapse")
-                    } else {
-                        $("#regFail").removeClass("collapse").text(valMsg.userExist)
-                    }
-                }
-                return
-            }
-            case API.login: {
-                if (status === "error") {
-                    $("#loginFail").removeClass("collapse").text(valMsg.regErr)
-                } else {
-                    if (xhr.response.error === ""){
-                        $("#loginSucc").removeClass("collapse").text(valMsg.regErr)
-                        saveCookie(data)
-                    } else {
-                        $("#loginFail").removeClass("collapse").text(xhr.response.error)
-                    }
-                }
-                return
-            }
-            case API.delAcc: {
-                if (status === "error") {
-                    $("#regFailed").removeClass("collapse").text(valMsg.accDelErr)
-                } else {
-                    if (xhr.response.error === ""){
-                        $("#regFail").removeClass("collapse")
-                    } else {
-                        $("#regAlert").removeClass("collapse").text(xhr.response.error)
-                    }
-                }
-                return
-            }
-        }
-    })
-}
-// makeEventListeners()
-
-$("#loginForm").keydown(function(){
-    $("#loginFail").addClass("collapse")
-    $("#loginSucc").addClass("collapse")
-})
-
-$("#regForm").keydown("keydown", function(){
-    $("#regFail").addClass("collapse")
-    $("#regSucc").addClass("collapse")
-})
-
-$(function() {
-    $.validator.addMethod("strongPass", function(value, element) {
-        return passwordPattern.test(value)
-    })
-
-    $("#loginForm").validate({
-        submitHandler: function(form, event) {
-            $("#loginFail").addClass("collapse")
-            $("#loginSucc").addClass("collapse")
-            event.preventDefault()
-
-            postHandler(getLoginInfo($("#loginForm")), form, API.login)
-        },
-        rules: {
-            loginUser: "required",
-            loginPass: "required",
-        },
-        messages: {
-            loginUser: valMsg.noUser,
-            loginPass: valMsg.noPass
-        }
-    })
-
-    $("#regForm").validate({
-        submitHandler: function(form, event) {
-            $("#regFail").addClass("collapse")
-            $("#regSucc").addClass("collapse")
-            event.preventDefault()
-            let data = getRegInfo()
-            postHandler(data, form, API.register)
-        },
-        rules: {
-            regFName: "required",
-            regLName: "required",
-            regUser: {
-                required: true,
-            },
-            regPass: {
-                required: true,
-                strongPass: true
-            },
-            regRepeatPass: {
-                required: true,
-                equalTo: "#regPass"
-            },
-            postResponse: {
-                equalTo: ""
-            }
-        },
-        messages: {
-            regFName: valMsg.noFName,
-            regLName: valMsg.noLName,
-            regUser: valMsg.noUser,
-            regPass: {
-                required: valMsg.noPass,
-                strongPass: valMsg.badPassMsg
-            },
-            regRepeatPass: {
-                required: valMsg.noPass,
-                equalTo: valMsg.passMismatch
-            },
-            postResponse: {
-                equalTo: "Registration failed, please try again"
-            }
-
-        }
-    });
-})
-
-$.validator.setDefaults({
-    errorClass: "is-invalid",
-
-    validClass: "is-valid",
-
-    errorPlacement: function(error, element){
-        $(element).next().append(error)
-    }
-});
-
-function doLogout() {
-    userId = 0;
-    firstName = "";
-    lastName = "";
-    document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-    window.location.href = "index.html";
-}
-function saveCookie(data) {
-    let date = new Date();
-    date.setTime(date.getTime()+(20*60*1000));
-    document.cookie = "userId=" + data.id +
-        ";firstName=" + data.firstName +
-        ";lastName=" + data.lastName +
-        ";expires=" + date.toUTCString();
+/*
+function makeEventListeners (){
+    makeLoginEventListeners()
+    makeRegEventListeners()
 }
 
-function readCookie() {
-    userId = -1;
-    let data = document.cookie;
-    let splits = data.split(";");
-
-    for(var i = 0; i < splits.length; i++) {
-        let thisOne = splits[i].trim();
-        let tokens = thisOne.split("=");
-        if (tokens[0] === "firstName") {
-            firstName = tokens[1];
-        } else if (tokens[0] === "lastName") {
-            lastName = tokens[1];
-        } else if (tokens[0] === "userId") {
-            userId = parseInt(tokens[1].trim());
-        }
-    }
-    return userId >= 0;
-
-}
+makeEventListeners()
+*/

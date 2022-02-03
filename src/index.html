@@ -24,20 +24,19 @@
         </p>
     <![endif]-->
     <h1 id= "mainTitle" class="text-center">Contact Man<img id="mainLogo" src="./resources/logo_transparent.png"></h1>
-    <form class="form-container needs-validation col   " id="loginForm" novalidate>
-        <div class="alert alert-danger collapse" role="alert" id="loginFail"></div>
-        <div class="alert alert-success collapse" role="alert" id="loginSucc">Login success!</div>
+    <form class="form-container needs-validation col" id="loginForm" novalidate>
+<!--        <div class="alert alert-success collapse" role="alert" id="loginSucc">Login success!</div>-->
         <div class="form-group mb-4 ">
 <!--                <label for="exampleInputEmail1">Username</label>-->
 <!--                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username" required>-->
             <label for="loginUser">Username</label>
             <input type="text" class="form-control" name="login" id="loginUser" aria-describedby="name" placeholder="Enter Username" required>
-            <div class="invalid-feedback" id="userValMsg">Please enter your username.</div>
+            <div class="invalid-feedback" id="userValMsg"></div>
         </div>
         <div class="form-group mb-2">
             <label for="loginPass">Password</label>
             <input type="password" class="form-control" name="password" id="loginPass" placeholder="Password" required>
-            <div class="invalid-feedback" id="passValMsg">Please enter your password.</div>
+            <div class="invalid-feedback" id="passValMsg"></div>
         </div>
         <div class="form-group form-check">
         </div>
@@ -53,6 +52,7 @@
                 </button>
             </div>
         </div>
+        <div class="form-group alert collapse" role="alert" id="loginAlert"></div>
     </form>
 
     <!-- Modal Register -->
@@ -63,8 +63,8 @@
                     <h5 class="modal-title" id="registerModalLabel">Register an account</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="alert alert-danger collapse" role="alert" id="regFail"></div>
-                <div class="alert alert-success collapse" role="alert" id="regSucc">Registration success!</div>
+                <div class="alert collapse" role="alert" id="regAlert"></div>
+<!--                <div class="alert alert-success collapse" role="alert" id="regSucc"></div>-->
                 <form class="needs-validation" id="regForm" novalidate>
                     <div class="modal-body">
                         <div class="form-group row">
@@ -127,7 +127,6 @@ crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
 <script type="text/javascript" src="sha256.js"></script>
 <script src="main.js"></script>
-<!--<script src="landing.js"></script>-->
 <script>
     // function makeLoginEventListeners(){
     //     loginForm.addEventListener("submit", function(event){
