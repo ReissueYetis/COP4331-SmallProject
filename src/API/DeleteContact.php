@@ -22,14 +22,6 @@
 			$stmt = $conn->prepare("DELETE FROM Contacts WHERE ID=?");
 			$stmt->bind_param("i", $contactId);
 
-			$deletedContact .= '"ID": ' . $row["ID"] . ',';
-			$deletedContact .= '"FirstName": "' . $row["FirstName"] . '",';
-			$deletedContact .= '"LastName": "' . $row["LastName"] . '",';
-			$deletedContact .= '"PhoneNumber": "' . $row["PhoneNumber"] . '",';
-			$deletedContact .= '"EmailAddress": "' . $row["EmailAddress"] . '",';
-			$deletedContact .= '"DateCreated": "' . $row["DateCreated"] . '",';
-			$deletedContact .= '"UserID": ' . $row["UserID"];
-
 			$stmt->execute();
 			returnWithInfo( $deletedContact );
 		}
@@ -58,9 +50,12 @@
 		sendResultInfoAsJson( $retValue );
 	}
 
-	function returnWithInfo( $deletedContact )
+	function returnWithInfo( $id, $firstName, $lastName, $phoneNumber, $emailAddress, $dateCreated,
+	$userId )
 	{
-		$retValue = '{' . $deletedContact .',"error":""}';
+		$retValue = '{"ID":' . $id . ',"FirstName":"' . $firstName . '","LastName":"' . $lastName .
+		'","PhoneNumber": "' . $phoneNumber . '","EmailAddress":"' . $emailAddress . '","DateCreated":"'
+		. $dateCreated . '","UserID":' . $userId . ',"error":""}';
 		sendResultInfoAsJson( $retValue );
 	}
 ?>
