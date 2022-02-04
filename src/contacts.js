@@ -11,17 +11,15 @@ $("#searchForm").on("search", function(event){
     $.ajax({
         url: urlBase + API.searchCon,
         data: {
-            id:userId,
+            id:readCookie("id"),
             search:$("#searchForm").val()
         },
         type: "POST",
         dataType: "json",
     })
-    .done(function (response, status){
-
+    .done(function (response, status){//TODO: display results, errors
     })
     .fail(function (xhr, status){
-
     })
     .always(function(xhr, status){
         console.log(xhr, status)
@@ -31,7 +29,7 @@ $("#searchForm").on("search", function(event){
 // handle add contact
 $(function() {
     $("#addConForm").validate({
-        submitHandler: function (event) {
+        submitHandler: function (form, event) {
             event.preventDefault()
             console.log(event)
             $.ajax({
@@ -41,39 +39,38 @@ $(function() {
                 dataType: "json",
                 contentType: "application/json"
             })
-                .done()
-                .fail()
-                .always(function(xhr, status){
-                    console.log(xhr, status)
-                })
+            .done()//TODO: functions to process response for client
+            .fail()
+            .always(function(xhr, status){
+                console.log(xhr, status)
+            })
         },
         rules: {
-            addFName: "required",
-            addLName: "required",
-            addEmail: "required",
-            addPhone: {
+            firstName: "required",
+            lastName: "required",
+            emailAddress: "required",
+            phoneNumber: {
                 validPhone: true
             }
         },
         messages: {
-            addFName: valMsg.noFName,
-            addLName: valMsg.noLName,
-            addEmail: valMsg.noEmail,
-            addPhone: {
+            firstName: valMsg.noFName,
+            lastName: valMsg.noLName,
+            emailAddress: valMsg.badEmail,
+            phoneNumber: {
                 validPhone: valMsg.badPhone
             }
         }
     })
 })
-$("#addConForm").on("keydown", function(){
-    // $("#addConAlert").addClass("collapse").removeClass("alert-danger alert-success")
-})
 
 // handle edit contact
 $(function() {
+    // will probably need to change the selector to not reference unique ID's
     $("#editConForm").validate({
-        submitHandler:  function (event) {
+        submitHandler:  function (form, event) {
             event.preventDefault()
+            event.stopPropagation()
             // console.log(event)
             $.ajax({
                 url: urlBase + API.editCon,
@@ -81,26 +78,26 @@ $(function() {
                 type: "POST",
                 dataType: "json",
                 contentType: "application/json"
-            })
-            .done()
+            })// response and remote validation handling
+            .done()//TODO: functions to process response for client
             .fail()
             .always(function(xhr, status){
                 console.log(xhr, status)
             })
         },
         rules: {
-            addFName: "required",
-            addLName: "required",
-            addEmail: "required",
-            addPhone: {
+            firstName: "required",
+            lastName: "required",
+            emailAddress: "required",
+            phoneNumber: {
                 validPhone: true
             }
         },
         messages: {
-            addFName: valMsg.noFName,
-            addLName: valMsg.noLName,
-            addEmail: valMsg.noEmail,
-            addPhone: {
+            firstName: valMsg.noFName,
+            lastName: valMsg.noLName,
+            emailAddress: valMsg.badEmail,
+            phoneNumber: {
                 validPhone: valMsg.badPhone
             }
         }
@@ -113,42 +110,51 @@ $("#editConForm").on("keydown", function(){
 // handle account deletion
 $(function(){
     $("#accDelForm").validate({
-        submitHandler: function (event){
+        submitHandler: function (form, event){
             event.preventDefault()
             // postHandler(getLoginInfo($("#accDelForm")), API.login)
             $.ajax({
-                url: urlBase + API.register,
+                url: urlBase + API.delAcc,
                 data: getLoginInfo($("#accDelForm")),
                 type: "POST",
                 dataType: "json",
+            })// response and remote validation handling
+            .done(function(response, status) {
+                if (response.error === "") {
+                    $("#delAccAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.accDelSucc)
+                    doLogout()
+                } else {
+                    $("#delAccAlert").removeClass("collapse alert-success").addClass("alert-danger").text(response.error)
+                }
             })
-                .done(function(response, status) {
-                    if (response.error === "") {
-                        $("#delAccAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.loginSucc)
-                        doLogout()
-                    } else {
-                        $("#delAccAlert").removeClass("collapse alert-success").addClass("alert-danger").text(xhr.response.error)
-                    }
-                })
-                .fail(function (xhr, status) {
-                    $("#delAccAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.loginErr)
-                })
-                .always(function(xhr, status){
-                    console.log(xhr, status)
-                })
-        },
+            .fail(function (xhr, status) {
+                $("#delAccAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.accDelErr)
+            })
+            .always(function(xhr, status){
+                console.log(xhr, status)
+            })
+        },// validation settings for form
         rules: {
-            accDel: "required",
-            passDel: "required"
+            login: "required",
+            password: "required"
         },
         messages: {
-            accDel: "Please enter your username",
-            passDel: "Please enter your password"
+            login: "Please enter your username",
+            password: "Please enter your password"
         }
     })
 })
+
+// Reset alert badges on keypress
 $("#accDelForm").on("keydown",function(){
-    $("#accDelAlert").addClass("collapse").removeClass("alert-danger alert-success")
+    $("#delAccAlert").addClass("collapse").removeClass("alert-danger alert-success")
+})
+$("#addConForm").on("keydown", function(){
+    // $("#addConAlert").addClass("collapse").removeClass("alert-danger alert-success")
+})
+
+$("#logoutBtn").click(function (event){
+    doLogout()
 })
 
 // validator settings

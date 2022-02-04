@@ -11,25 +11,25 @@ const API = {
     searchCon: "SearchContact.php"
 }
 
-// let isPasswordMatch = false;
 const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}/;
-const phonePattern = /^[0-9]{3}-[0-9]{3}-[0-9]{4}$/;
+const phonePattern = /(^$)|^([0-9]{3}-[0-9]{3}-[0-9]{4})$/;
 
 const valMsg = {
     // badLoginMsg : "Username or password not recognized",
     userExist : "Username already exists",
-    badPassMsg : "Password Requirements:<ul><li>Must contain a number, a special character, an uppercase letter, and a lower case letter</li><li>Is at least 8 characters long</li></ul>",
+    badPassMsg : "Password Requirements:<ul><li>Contains an uppercase and lower-case letter, a number, and a special character</li><li>Is at least 8 characters long</li></ul>",
     passMismatch : "Passwords do not match",
     noUser : "Please enter a username.",
     noPass : "Please enter a password.",
     noFName: "Please enter first name",
     noLName: "Please enter last name",
-    noEmail: "Please enter an E-mail",
-    badPhone: "Please enter a valid phone number",
-    regSucc: "Registration Succes!",
+    badEmail: "Please enter a valid E-mail address",
+    badPhone: "\"XXX-XXX-XXXX\" or blank ",
+    regSucc: "Registration Succes! You may now login",
     regErr: "Registration failed, please try again",
     loginSucc: "Login Success",
     loginErr: "Login failed, please try again",
+    accDelSucc: "Account deletion successful",
     accDelErr: "Account deletion failed, please try again"
 }
 
@@ -62,6 +62,7 @@ $("#loginForm").on("keydown", function () {
     $("#loginAlert").addClass("collapse").removeClass("alert-danger alert-success")
 })
 
+// Handle login
 $(function() {
     $("#loginForm").validate({
         submitHandler: function (form, event) {
@@ -71,22 +72,34 @@ $(function() {
                 data: getLoginInfo($("#loginForm")),
                 type: "POST",
                 dataType: "json",
-            })
+            })// response handling and remote validation
             .done(function (response, status) {
                 if (response.error === "") {
-                    $("#loginAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.loginSucc)
-                    saveCookie(response)
+                    // $("#loginAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.loginSucc)
+                    userId = response.id
+                    firstName = response.firstName;
+                    lastName = response.lastName;
+                    saveCookie()
+                    doLogin()
+
                 } else {
-                    $("#loginAlert").removeClass("collapse alert-success").addClass("alert-danger").text(response.error)
+                    $("#loginAlert")
+                        .removeClass("collapse alert-success")
+                        .addClass("alert-danger")
+                        .text(response.error)
                 }
             })
             .fail(function (xhr, status) {
-                $("#loginAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.loginErr)
+                $("#loginAlert")
+                    .removeClass("collapse alert-success")
+                    .addClass("alert-danger")
+                    .text(valMsg.loginErr)
             })
             .always(function(xhr, status){
                 console.log(xhr, status)
             })
         },
+        // validator settings for login
         rules: {
             login: "required",
             password: "required",
@@ -98,6 +111,7 @@ $(function() {
     })
 })
 
+// Handle register
 $(function() {
     $("#regForm").validate({
         submitHandler: function(form, event){
@@ -108,21 +122,31 @@ $(function() {
                 data: data,
                 type: "POST",
                 dataType: "json",
-            })
+            })// response handling and remote validation
             .done(function(response, status){
                 if (response.error === ""){
-                    $("#regAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.regSucc)
+                    $("#regAlert")
+                        .removeClass("collapse alert-danger")
+                        .addClass("alert-success")
+                        .text(valMsg.regSucc)
                 } else {
-                    $("#regAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.userExist)
+                    $("#regAlert")
+                        .removeClass("collapse alert-success")
+                        .addClass("alert-danger")
+                        .text(valMsg.userExist)
                 }
             })
             .fail(function(xhr, status){
-                $("#regAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.regErr)
+                $("#regAlert")
+                    .removeClass("collapse alert-success")
+                    .addClass("alert-danger")
+                    .text(valMsg.regErr)
             })
             .always(function(xhr, status){
                     console.log(xhr, status)
                 })
         },
+        // validator settings for registration
         rules: {
             regFName: "required",
             regLName: "required",
@@ -161,6 +185,10 @@ $(function() {
     })
 })
 
+function doLogin() {
+    window.location.href = "home.html";
+}
+
 function doLogout() {
     userId = 0;
     firstName = "";
@@ -168,34 +196,37 @@ function doLogout() {
     document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
     window.location.href = "index.html";
 }
-function saveCookie(data) {
+
+function saveCookie() {
     let date = new Date();
     date.setTime(date.getTime()+(20*60*1000));
-    document.cookie = "id=" + data.id +
-        ";firstName=" + data.firstName +
-        ";lastName=" + data.lastName +
+    document.cookie = "id=" + userId +
+        ";firstName=" + firstName +
+        ";lastName=" + lastName +
         ";expires=" + date.toUTCString();
 }
 
 function readCookie(key) {
-    userId = -1;
+    // userId = -1;
     let data = document.cookie;
     let splits = data.split(";");
 
     for(var i = 0; i < splits.length; i++) {
         let thisOne = splits[i].trim();
         let tokens = thisOne.split("=");
-        if (tokens[0] === "firstName") {
-            firstName = tokens[1];
-        } else if (tokens[0] === "lastName") {
-            lastName = tokens[1];
-        } else if (tokens[0] === "userId") {
-            userId = parseInt(tokens[1].trim());
+        if (tokens[0] === "key") {
+            return decodeURIComponent(tokens[1])
         }
+        // else if (tokens[0] === "lastName") {
+        //     lastName = tokens[1];
+        // } else if (tokens[0] === "userId") {
+        //     userId = parseInt(tokens[1].trim());
+        // }
     }
-    return userId >= 0;
+    // return userId >= 0;
 }
 
+// global validation settings
 $(function() {
     $.validator.addMethod("strongPass", function (value, element) {
         return passwordPattern.test(value)
