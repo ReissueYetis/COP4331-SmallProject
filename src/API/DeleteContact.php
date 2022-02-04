@@ -58,4 +58,9 @@
 		sendResultInfoAsJson( $retValue );
 	}
 
+	function returnWithInfo( $deletedContact )
+	{
+		$retValue = '{' . $deletedContact .',"error":""}';
+		sendResultInfoAsJson( $retValue );
+	}
 ?>
