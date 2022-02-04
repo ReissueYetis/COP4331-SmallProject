@@ -5,45 +5,58 @@ function getContactInfo(form) {
     return contact
 }
 
-// handle search contact
+// callbacks
+function accDeleteCB(response, textStatus, xhr){
+    if (textStatus !== "error") {
+        if (response.error === "") {
+            $("#delAccAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.accDelSucc)
+            doLogout()
+        } else {
+            $("#delAccAlert").removeClass("collapse alert-success").addClass("alert-danger").text(response.error)
+        }
+    }
+    else {
+        $("#delAccAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.accDelErr)
+    }
+}
+
+//TODO: finish functions to process search, add, edit, and delete for client
+function addConCB(response, status, xhr){
+    if (status !== "error") {
+        if (response.error === "") {
+            $("#addConAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.regSucc)
+            // do something with new contact here
+        } else {
+            $("#addConAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.userExist)
+            // $("#loginPass").removeClass("is-valid")
+            // $("#loginUser").removeClass("is-valid")
+        }
+    } else {
+        $("#addConAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.addConErr)
+    }
+}
+function editConCB(response, textStatus, xhr){
+
+}
+function deleteConCB(response, textStatus, xhr){
+
+}
+
 $("#searchForm").on("search", function(event){
     event.preventDefault()
-    $.ajax({
-        url: urlBase + API.searchCon,
-        data: {
-            id:readCookie("id"),
-            search:$("#searchForm").val()
-        },
-        type: "POST",
-        dataType: "json",
-    })
-    .done(function (response, status){//TODO: display results, errors
-    })
-    .fail(function (xhr, status){
-    })
-    .always(function(xhr, status){
-        console.log(xhr, status)
-    })
+    let data = $("#searchForm").val()
+    //
 })
 
-// handle add contact
+// event and validation handling
 $(function() {
+    // add contact
     $("#addConForm").validate({
         submitHandler: function (form, event) {
             event.preventDefault()
-            console.log(event)
-            $.ajax({
-                url: urlBase + API.delCon,
-                data: getContactInfo($("#addConForm")),
-                type: "POST",
-                dataType: "json",
-                contentType: "application/json"
-            })
-            .done()//TODO: functions to process response for client
-            .fail()
-            .always(function(xhr, status){
-                console.log(xhr, status)
-            })
+            // console.log(event)
+            let data = getContactInfo($("#addConForm"))
+            postHandler(data, addConCB, API.delCon)
         },
         rules: {
             firstName: "required",
@@ -60,30 +73,23 @@ $(function() {
             phoneNumber: {
                 validPhone: valMsg.badPhone
             }
+        },
+        errorClass: "is-invalid",
+        validClass: "is-valid",
+        errorPlacement: function(error, element){
+            $(element).next().append(error)
         }
     })
-})
 
-// handle edit contact
-$(function() {
+    // edit contact
     // will probably need to change the selector to not reference unique ID's
     $("#editConForm").validate({
         submitHandler:  function (form, event) {
             event.preventDefault()
             event.stopPropagation()
             // console.log(event)
-            $.ajax({
-                url: urlBase + API.editCon,
-                data: getContactInfo($("#editConForm")),
-                type: "POST",
-                dataType: "json",
-                contentType: "application/json"
-            })// response and remote validation handling
-            .done()//TODO: functions to process response for client
-            .fail()
-            .always(function(xhr, status){
-                console.log(xhr, status)
-            })
+            let data = getContactInfo($("#editConForm"))
+            postHandler(data, editConCB, API.editCon)
         },
         rules: {
             firstName: "required",
@@ -102,37 +108,13 @@ $(function() {
             }
         }
     })
-})
-$("#editConForm").on("keydown", function(){
-    // $("#editAlert").addClass("collapse").removeClass("alert-danger alert-success")
-})
 
-// handle account deletion
-$(function(){
+    //delete account
     $("#accDelForm").validate({
         submitHandler: function (form, event){
             event.preventDefault()
-            // postHandler(getLoginInfo($("#accDelForm")), API.login)
-            $.ajax({
-                url: urlBase + API.delAcc,
-                data: getLoginInfo($("#accDelForm")),
-                type: "POST",
-                dataType: "json",
-            })// response and remote validation handling
-            .done(function(response, status) {
-                if (response.error === "") {
-                    $("#delAccAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.accDelSucc)
-                    doLogout()
-                } else {
-                    $("#delAccAlert").removeClass("collapse alert-success").addClass("alert-danger").text(response.error)
-                }
-            })
-            .fail(function (xhr, status) {
-                $("#delAccAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.accDelErr)
-            })
-            .always(function(xhr, status){
-                console.log(xhr, status)
-            })
+            let data = getLoginInfo($("#accDelForm"))
+            postHandler(data, accDeleteCB, API.login)
         },// validation settings for form
         rules: {
             login: "required",
@@ -141,18 +123,22 @@ $(function(){
         messages: {
             login: "Please enter your username",
             password: "Please enter your password"
+        },
+        errorClass: "is-invalid",
+        errorPlacement: function(error, element){
+            $(element).next().append(error)
         }
     })
 })
-
-// Reset alert badges on keypress
+$("#editConForm").on("keydown", function(){
+    // $("#editAlert").addClass("collapse").removeClass("alert-danger alert-success")
+})
 $("#accDelForm").on("keydown",function(){
     $("#delAccAlert").addClass("collapse").removeClass("alert-danger alert-success")
 })
 $("#addConForm").on("keydown", function(){
-    // $("#addConAlert").addClass("collapse").removeClass("alert-danger alert-success")
+    $("#addConAlert").addClass("collapse").removeClass("alert-danger alert-success")
 })
-
 $("#logoutBtn").click(function (event){
     doLogout()
 })
@@ -163,12 +149,4 @@ $(function() {
         return phonePattern.test(value)
     })
 })
-$.validator.setDefaults({
-    errorClass: "is-invalid",
-
-    validClass: "is-valid",
-
-    errorPlacement: function(error, element){
-        $(element).next().append(error)
-    }
-});
+// $.validator.setDefaults({});

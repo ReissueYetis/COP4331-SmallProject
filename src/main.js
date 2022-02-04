@@ -8,7 +8,7 @@ const API = {
     addCon: "AddContact.php",
     delCon: "DeleteContact.php",
     editCon: "EditContact.php",
-    searchCon: "SearchContact.php"
+    searchCon: "SearchContacts.php"
 }
 
 const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}/;
@@ -30,7 +30,8 @@ const valMsg = {
     loginSucc: "Login Success",
     loginErr: "Login failed, please try again",
     accDelSucc: "Account deletion successful",
-    accDelErr: "Account deletion failed, please try again"
+    accDelErr: "Account deletion failed, please try again",
+    addConErr: "Contact creation failed, please try again"
 }
 
 let userId = 0;
@@ -54,50 +55,68 @@ function getRegInfo(){
     return {firstName, lastName, login, password}
 }
 
-$("#regForm").on("keydown", function(){
-    $("#regAlert").addClass("collapse").removeClass("alert-danger alert-success")
-})
+function postHandler(data, callback ,endPoint) {
+    console.log(data, endPoint)
+    $.ajax({
+        url: urlBase + endPoint,
+        data: data,
+        type: "POST",
+        dataType: "json",
+        success: function (response, textStatus, xhr) {
+            callback(response, textStatus, xhr)
+        },
+        error: function(response, textStatus, xhr){
+            callback(response, textStatus, xhr)
+        }
+    }).always(function (xhr, status, error) {
+        console.log("IN ALWAYS,\n XHR:\n", xhr, "\nSTATUS:\n", status, "\nERR:\n", error)
+    })
+}
 
-$("#loginForm").on("keydown", function () {
-    $("#loginAlert").addClass("collapse").removeClass("alert-danger alert-success")
-})
+// Callbacks
+function regCB(response, status, xhr){
+    // console.log(response, status, xhr)
+    if (status !== "error") {
+        if (response.error === "") {
+            $("#regAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.regSucc)
+        } else {
+            $("#regAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.userExist)
+        }
+    }else{
+        $("#regAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.regErr)
+        $("#regUser").removeClass("is-valid").addClass("is-invalid")
+    }
+}
 
-// Handle login
+function loginCB(response, status, xhr){
+    console.log(response, status, xhr)
+    if (status !== "error") {
+        if (response.error === "") {
+            // $("#loginAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.loginSucc)
+            userId = response.id
+            firstName = response.firstName;
+            lastName = response.lastName;
+            saveCookie()
+            doLogin()
+
+        } else {
+            $("#loginAlert").removeClass("collapse alert-success").addClass("alert-danger").text(response.error)
+        }
+    }
+    else {
+        $("#loginAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.loginErr)
+    }
+}
+
+// event and validation handling
 $(function() {
+    // login
     $("#loginForm").validate({
+        // event handler
         submitHandler: function (form, event) {
             event.preventDefault()
-            $.ajax({
-                url: urlBase + API.login,
-                data: getLoginInfo($("#loginForm")),
-                type: "POST",
-                dataType: "json",
-            })// response handling and remote validation
-            .done(function (response, status) {
-                if (response.error === "") {
-                    // $("#loginAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.loginSucc)
-                    userId = response.id
-                    firstName = response.firstName;
-                    lastName = response.lastName;
-                    saveCookie()
-                    doLogin()
-
-                } else {
-                    $("#loginAlert")
-                        .removeClass("collapse alert-success")
-                        .addClass("alert-danger")
-                        .text(response.error)
-                }
-            })
-            .fail(function (xhr, status) {
-                $("#loginAlert")
-                    .removeClass("collapse alert-success")
-                    .addClass("alert-danger")
-                    .text(valMsg.loginErr)
-            })
-            .always(function(xhr, status){
-                console.log(xhr, status)
-            })
+            let data = getLoginInfo($("#loginForm"))
+            postHandler(data, loginCB, API.login)
         },
         // validator settings for login
         rules: {
@@ -107,44 +126,20 @@ $(function() {
         messages: {
             login: valMsg.noUser,
             password: valMsg.noPass
+        },
+        errorClass: "is-invalid",
+        errorPlacement: function(error, element){
+            $(element).next().append(error)
         }
     })
-})
 
-// Handle register
-$(function() {
+    // register
     $("#regForm").validate({
+        // event handler
         submitHandler: function(form, event){
             event.preventDefault()
             let data = getRegInfo()
-            $.ajax({
-                url: urlBase + API.register,
-                data: data,
-                type: "POST",
-                dataType: "json",
-            })// response handling and remote validation
-            .done(function(response, status){
-                if (response.error === ""){
-                    $("#regAlert")
-                        .removeClass("collapse alert-danger")
-                        .addClass("alert-success")
-                        .text(valMsg.regSucc)
-                } else {
-                    $("#regAlert")
-                        .removeClass("collapse alert-success")
-                        .addClass("alert-danger")
-                        .text(valMsg.userExist)
-                }
-            })
-            .fail(function(xhr, status){
-                $("#regAlert")
-                    .removeClass("collapse alert-success")
-                    .addClass("alert-danger")
-                    .text(valMsg.regErr)
-            })
-            .always(function(xhr, status){
-                    console.log(xhr, status)
-                })
+            postHandler(data, regCB, API.register)
         },
         // validator settings for registration
         rules: {
@@ -160,9 +155,6 @@ $(function() {
             regRepeatPass: {
                 required: true,
                 equalTo: "#regPass"
-            },
-            postResponse: {
-                equalTo: ""
             }
         },
         messages: {
@@ -176,17 +168,36 @@ $(function() {
             regRepeatPass: {
                 required: valMsg.noPass,
                 equalTo: valMsg.passMismatch
-            },
-            postResponse: {
-                equalTo: "Registration failed, please try again"
             }
-
+        },
+        errorClass: "is-invalid",
+        validClass: "is-valid",
+        errorPlacement: function(error, element){
+            $(element).next().append(error)
         }
     })
 })
+$("#loginForm").on({
+    "keydown": function () {
+        $("#loginAlert").addClass("collapse").removeClass("alert-danger alert-success")
+        // $("#loginPass").removeClass("is-valid")
+        // $("#loginUser").removeClass("is-valid")
+    },
+    "keyup": function  () {
+        // $("#loginPass").removeClass("is-valid")
+        // $("#loginUser").removeClass("is-valid")
+    }
+})
+$("#regForm").on("keydown", function(){
+    $("#regAlert").addClass("collapse").removeClass("alert-danger alert-success")
+    // $("#regUser").removeClass("is-valid").removeClass("is-invalid")
+})
 
 function doLogin() {
-    window.location.href = "home.html";
+    console.log(document.cookie)
+    if (readCookie("id") > 0) {
+        window.location.href = "home.html";
+    }
 }
 
 function doLogout() {
@@ -204,6 +215,7 @@ function saveCookie() {
         ";firstName=" + firstName +
         ";lastName=" + lastName +
         ";expires=" + date.toUTCString();
+    console.log(document.cookie)
 }
 
 function readCookie(key) {
@@ -214,7 +226,7 @@ function readCookie(key) {
     for(var i = 0; i < splits.length; i++) {
         let thisOne = splits[i].trim();
         let tokens = thisOne.split("=");
-        if (tokens[0] === "key") {
+        if (tokens[0] === key) {
             return decodeURIComponent(tokens[1])
         }
         // else if (tokens[0] === "lastName") {
@@ -232,16 +244,9 @@ $(function() {
         return passwordPattern.test(value)
     })
 })
-$.validator.setDefaults({
-    errorClass: "is-invalid",
+// $.validator.setDefaults({});
 
-    validClass: "is-valid",
-
-    errorPlacement: function(error, element){
-        $(element).next().append(error)
-    }
-});
-
+// OLD stuff
 // const regForm = document.getElementById("regForm");
 // const loginForm = document.getElementById("loginForm");
 

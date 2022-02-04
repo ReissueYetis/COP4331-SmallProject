@@ -14,38 +14,7 @@
     <!-- Place favicon.ico in the root directory -->
 
 </head>
-<!--Delete Account modal-->
-<div class="modal fade" tabindex="-1" id="accDelConfirm">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Delete Account Confirmation</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form class="needs-validation" id="accDelForm" novalidate>
-                <div class="alert collapse" role="alert" id="accDelFail"></div>
-                <div class="alert collapse" role="alert" id="accDelSucc">Account deletion successful</div>
-                <div class="modal-body">
-                    Please enter your username and password to confirm account deletion.
-                    <div class="form-group mb-4 ">
-                        <label for="accDel">Username</label>
-                        <input type="text" class="form-control" name="login" id="accDel" aria-describedby="name" placeholder="Enter Username">
-                        <div class="invalid-feedback" id="delUserMsg">Please enter your username.</div>
-                    </div>
-                    <div class="form-group mb-2">
-                        <label for="passDel">Password</label>
-                        <input type="password" name="password" class="form-control" id="passDel" placeholder="Password">
-                        <div class="invalid-feedback" id="delPassMsg">Please enter your password.</div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-danger" id="delAccBtn">Confirm</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
 
 <!-- Add New User Modal -->
 <div class="modal fade" tabindex="-1" id="addConModal">
@@ -59,16 +28,16 @@
                 <form id="addConForm" class="p-2" novalidate>
                     <div class="row mb-3 gx-3">
                         <div class="col">
-                            <input type="text" name="firstName" class="form-control form-control-lg" placeholder="Enter First Name" required>
+                            <input type="text" name="firstName" class="form-control form-control-lg" placeholder="Enter First Name">
                             <div class="invalid-feedback">First name is required!</div>
                         </div>
                         <div class="col">
-                            <input type="text" name="lastName" class="form-control form-control-lg" placeholder="Enter Last Name" required>
+                            <input type="text" name="lastName" class="form-control form-control-lg" placeholder="Enter Last Name">
                             <div class="invalid-feedback">Last name is required!</div>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <input type="email" name="emailAddress" class="form-control form-control-lg" placeholder="Enter E-mail" required>
+                        <input type="email" name="emailAddress" class="form-control form-control-lg" placeholder="Enter E-mail">
                         <div class="invalid-feedback">E-mail is required!</div>
                     </div>
                     <div class="mb-3">
@@ -211,7 +180,7 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
 <script type="text/javascript" src="sha256.js"></script>
-<script src="main.js"></script>
+<!--<script src="main.js"></script>-->
 <!--<script src="main.js"></script>-->
 <!--<script src="contacts.js"></script>-->
 </body>

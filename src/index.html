@@ -30,12 +30,12 @@
 <!--                <label for="exampleInputEmail1">Username</label>-->
 <!--                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username" required>-->
             <label for="loginUser">Username</label>
-            <input type="text" class="form-control" name="login" id="loginUser" aria-describedby="name" placeholder="Enter Username" required>
+            <input type="text" class="form-control" name="login" id="loginUser" aria-describedby="name" placeholder="Enter Username" >
             <div class="invalid-feedback" id="userValMsg"></div>
         </div>
         <div class="form-group mb-2">
             <label for="loginPass">Password</label>
-            <input type="password" class="form-control" name="password" id="loginPass" placeholder="Password" required>
+            <input type="password" class="form-control" name="password" id="loginPass" placeholder="Password" >
             <div class="invalid-feedback" id="passValMsg"></div>
         </div>
         <div class="form-group form-check">
@@ -64,7 +64,6 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="alert collapse" role="alert" id="regAlert"></div>
-<!--                <div class="alert alert-success collapse" role="alert" id="regSucc"></div>-->
                 <form class="needs-validation" id="regForm" novalidate>
                     <div class="modal-body">
                         <div class="form-group row">
@@ -100,12 +99,7 @@
                                     pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}"
                             >
                             <div class="invalid-feedback" id="repeatPassMsg"></div>
-<!--                            <div id="regSuccess"></div>-->
                         </div>
-<!--                        <div class="form-group">-->
-<!--                            <input type="text" class="form-control collapse" name="postResponse" id="postResponse" value="">-->
-<!--                            <div class="invalid-feedback" id="regError"></div>-->
-<!--                        </div>-->
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary" id="regButton">Register</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
