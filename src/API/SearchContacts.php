@@ -3,6 +3,7 @@
 	$inData = getRequestInfo();
 
 	$searchResults = "";
+	$finalResults = "";
 	$searchCount = 0;
 
 	$conn = new mysqli("localhost", "MAINUSER", "COP4331Project!", "COP4331");
@@ -24,16 +25,21 @@
 		{
 			if( $searchCount > 0 )
 			{
-				$searchResults .= ",";
+				$finalResults .= ",";
 			}
+			$finalResults .= "{";
+
 			$searchCount++;
-			$searchResults .= '"' . $row["ID"] . '"';
-			$searchResults .= '"' . $row["FirstName"] . '"';
-			$searchResults .= '"' . $row["LastName"] . '"';
-			$searchResults .= '"' . $row["PhoneNumber"] . '"';
-			$searchResults .= '"' . $row["EmailAddress"] . '"';
-			$searchResults .= '"' . $row["DateCreated"] . '"';
-			$searchResults .= '"' . $row["UserID"] . '"';
+			$searchResults = "";
+			$searchResults .= '"ID": ' . $row["ID"] . ',';
+			$searchResults .= '"FirstName": "' . $row["FirstName"] . '",';
+			$searchResults .= '"LastName": "' . $row["LastName"] . '",';
+			$searchResults .= '"PhoneNumber": "' . $row["PhoneNumber"] . '",';
+			$searchResults .= '"EmailAddress": "' . $row["EmailAddress"] . '",';
+			$searchResults .= '"DateCreated": "' . $row["DateCreated"] . '",';
+			$searchResults .= '"UserID": ' . $row["UserID"];
+
+			$finalResults .= $searchResults . "}";
 		}
 
 		if( $searchCount == 0 )
@@ -42,7 +48,7 @@
 		}
 		else
 		{
-			returnWithInfo( $searchResults );
+			returnWithInfo( $finalResults );
 		}
 
 		$stmt->close();
@@ -66,13 +72,14 @@
 
 	function returnWithError( $err )
 	{
-		$retValue = '{"id":0,"firstName":"","lastName":"","error":"' . $err . '"}';
+		$retValue = '{"ID":0,"FirstName":"","LastName":"","error":"' . $err . '"}';
 		sendResultInfoAsJson( $retValue );
 	}
 
-	function returnWithInfo( $searchResults )
+	function returnWithInfo( $finalResults )
 	{
-		$retValue = '{"results":[' . $searchResults . '],"error":""}';
+		// $retValue = '{' . $searchResults . ',"error":""}';
+		$retValue = '{"results":[' . $finalResults . '],"error":""}';
 		sendResultInfoAsJson( $retValue );
 	}
 
