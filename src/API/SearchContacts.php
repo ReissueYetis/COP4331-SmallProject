@@ -27,13 +27,13 @@
 				$searchResults .= ",";
 			}
 			$searchCount++;
-			$searchResults .= '"' . $row["ID"] . '"';
-			$searchResults .= '"' . $row["FirstName"] . '"';
-			$searchResults .= '"' . $row["LastName"] . '"';
-			$searchResults .= '"' . $row["PhoneNumber"] . '"';
-			$searchResults .= '"' . $row["EmailAddress"] . '"';
-			$searchResults .= '"' . $row["DateCreated"] . '"';
-			$searchResults .= '"' . $row["UserID"] . '"';
+			$searchResults .= '"ID"; ' . $row["ID"] . ', ';
+			$searchResults .= '"FirstName": "' . $row["FirstName"] . '", ';
+			$searchResults .= '"LastName": "' . $row["LastName"] . '", ';
+			$searchResults .= '"PhoneNumber", "' . $row["PhoneNumber"] . '", ';
+			$searchResults .= '"EmailAddress", "' . $row["EmailAddress"] . '", ';
+			$searchResults .= '"DateCreated", "' . $row["DateCreated"] . '", ';
+			$searchResults .= '"UserID", ' . $row["UserID"];
 		}
 
 		if( $searchCount == 0 )
@@ -66,7 +66,7 @@
 
 	function returnWithError( $err )
 	{
-		$retValue = '{"id":0,"firstName":"","lastName":"","error":"' . $err . '"}';
+		$retValue = '{"ID":0,"FirstName":"","LastName":"","error":"' . $err . '"}';
 		sendResultInfoAsJson( $retValue );
 	}
 
