@@ -30,6 +30,7 @@
 			$finalResults .= "{";
 
 			$searchCount++;
+			$searchResults = "";
 			$searchResults .= '"ID": ' . $row["ID"] . ',';
 			$searchResults .= '"FirstName": "' . $row["FirstName"] . '",';
 			$searchResults .= '"LastName": "' . $row["LastName"] . '",';
