@@ -27,7 +27,7 @@
 				$searchResults .= ",";
 			}
 			$searchCount++;
-			$searchResults .= '"ID"; ' . $row["ID"] . ', ';
+			$searchResults .= '"ID": ' . $row["ID"] . ', ';
 			$searchResults .= '"FirstName": "' . $row["FirstName"] . '", ';
 			$searchResults .= '"LastName": "' . $row["LastName"] . '", ';
 			$searchResults .= '"PhoneNumber", "' . $row["PhoneNumber"] . '", ';
