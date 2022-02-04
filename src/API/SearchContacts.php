@@ -27,10 +27,15 @@
 				$searchResults .= ",";
 			}
 			$searchCount++;
-			$searchResults .= '"' . $row["Name"] . '"';
+			$searchResults .= '"' . $row["ID"] . '"';
+			$searchResults .= '"' . $row["FirstName"] . '"';
+			$searchResults .= '"' . $row["LastName"] . '"';
+			$searchResults .= '"' . $row["PhoneNumber"] . '"';
+			$searchResults .= '"' . $row["EmailAddress"] . '"';
+			$searchResults .= '"' . $row["DateCreated"] . '"';
+			$searchResults .= '"' . $row["UserID"] . '"';
 		}
 
-		// No search results
 		if( $searchCount == 0 )
 		{
 			returnWithError( "No Records Found" );
