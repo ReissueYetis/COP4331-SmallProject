@@ -3,6 +3,7 @@
 	$inData = getRequestInfo();
 
 	$searchResults = "";
+	$finalResults = "";
 	$searchCount = 0;
 
 	$conn = new mysqli("localhost", "MAINUSER", "COP4331Project!", "COP4331");
@@ -24,8 +25,10 @@
 		{
 			if( $searchCount > 0 )
 			{
-				$searchResults .= ",";
+				$finalResults .= ",";
 			}
+			$finalResults .= "{";
+
 			$searchCount++;
 			$searchResults .= '"ID": ' . $row["ID"] . ',';
 			$searchResults .= '"FirstName": "' . $row["FirstName"] . '",';
@@ -34,6 +37,8 @@
 			$searchResults .= '"EmailAddress": "' . $row["EmailAddress"] . '",';
 			$searchResults .= '"DateCreated": "' . $row["DateCreated"] . '",';
 			$searchResults .= '"UserID": ' . $row["UserID"];
+
+			$finalResults .= $searchResults . "}";
 		}
 
 		if( $searchCount == 0 )
