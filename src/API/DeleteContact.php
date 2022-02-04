@@ -15,13 +15,12 @@
 		$stmt = $conn->prepare("SELECT * FROM Contacts WHERE ID=?");
 		$stmt->bind_param("i", $contactId);
 		$stmt->execute();
+		returnWithInfo( $row['ID'], $row['FirstName'], $row['LastName'], $row['PhoneNumber'],
+		$row['EmailAddress'], $row['DateCreated'], $row['UserID'] );
 		$result = $stmt->get_result();
 		// If search result comes up, delete account
 		if( $row = $result->fetch_assoc() )
 		{
-			returnWithInfo( $row['ID'], $row['FirstName'], $row['LastName'], $row['PhoneNumber'],
-			$row['EmailAddress'], $row['DateCreated'], $row['UserID'] );
-
 			$stmt = $conn->prepare("DELETE FROM Contacts WHERE ID=?");
 			$stmt->bind_param("i", $contactId);
 
