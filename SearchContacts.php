@@ -27,12 +27,12 @@
 				$searchResults .= ",";
 			}
 			$searchCount++;
-			$searchResults .= '"ID": ' . $row["ID"] . ', ';
-			$searchResults .= '"FirstName": "' . $row["FirstName"] . '", ';
-			$searchResults .= '"LastName": "' . $row["LastName"] . '", ';
-			$searchResults .= '"PhoneNumber": "' . $row["PhoneNumber"] . '", ';
-			$searchResults .= '"EmailAddress": "' . $row["EmailAddress"] . '", ';
-			$searchResults .= '"DateCreated": "' . $row["DateCreated"] . '", ';
+			$searchResults .= '"ID": ' . $row["ID"] . ',';
+			$searchResults .= '"FirstName": "' . $row["FirstName"] . '",';
+			$searchResults .= '"LastName": "' . $row["LastName"] . '",';
+			$searchResults .= '"PhoneNumber": "' . $row["PhoneNumber"] . '",';
+			$searchResults .= '"EmailAddress": "' . $row["EmailAddress"] . '",';
+			$searchResults .= '"DateCreated": "' . $row["DateCreated"] . '",';
 			$searchResults .= '"UserID": ' . $row["UserID"];
 		}
 
@@ -72,7 +72,7 @@
 
 	function returnWithInfo( $searchResults )
 	{
-		$retValue = '{"results":[' . $searchResults . '],"error":""}';
+		$retValue = '{' . $searchResults . ',"error":""}';
 		sendResultInfoAsJson( $retValue );
 	}
 
