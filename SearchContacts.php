@@ -47,7 +47,7 @@
 		}
 		else
 		{
-			returnWithInfo( $searchResults );
+			returnWithInfo( $finalResults );
 		}
 
 		$stmt->close();
@@ -75,10 +75,10 @@
 		sendResultInfoAsJson( $retValue );
 	}
 
-	function returnWithInfo( $searchResults )
+	function returnWithInfo( $finalResults )
 	{
 		// $retValue = '{' . $searchResults . ',"error":""}';
-		$retValue = '{"results":[' . $searchResults . '],"error":""}';
+		$retValue = '{"results":[' . $finalResults . '],"error":""}';
 		sendResultInfoAsJson( $retValue );
 	}
 
