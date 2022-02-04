@@ -54,10 +54,9 @@
 	function returnWithInfo( $id, $firstName, $lastName, $phoneNumber, $emailAddress, $dateCreated,
 	$userId )
 	{
-		// $retValue = '{"ID":' . $id . ',"FirstName":"' . $firstName . '","LastName":"' . $lastName .
-		// '","PhoneNumber": "' . $phoneNumber . '","EmailAddress":"' . $emailAddress . '","DateCreated":"'
-		// . $dateCreated . '","UserID":' . $userId . ',"error":""}';
-		$retValue = '{"error":"Hello"}';
+		$retValue = '{"ID":' . $id . ',"FirstName":"' . $firstName . '","LastName":"' . $lastName .
+		'","PhoneNumber": "' . $phoneNumber . '","EmailAddress":"' . $emailAddress . '","DateCreated":"'
+		. $dateCreated . '","UserID":' . $userId . ',"error":""}';
 		sendResultInfoAsJson( $retValue );
 	}
 ?>
