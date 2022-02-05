@@ -1,7 +1,6 @@
 <?php
 	$inData = getRequestInfo();
 
-
 	$conn = new mysqli("localhost", "MAINUSER", "COP4331Project!", "COP4331");
 	if ($conn->connect_error)
 	{
@@ -9,7 +8,6 @@
 	}
 	else
 	{
-		// Search to see if an account
 		$stmt = $conn->prepare("SELECT * FROM Contacts WHERE ID=?");
 		$stmt->bind_param("i", $inData["contactID"]);
 		$stmt->execute();
