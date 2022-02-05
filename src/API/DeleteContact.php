@@ -45,10 +45,9 @@
 		sendResultInfoAsJson( $retValue );
 	}
 
-	function returnWithInfo( $id, $firstName, $lastName, $phoneNumber, $emailAddress, )
+	function returnWithInfo( $id )
 	{
-		$retValue = '{"ID":' . $id . '"FirstName":"' . $firstName . '","LastName":"' . $lastName .
-		'","PhoneNumber":"' . $phoneNumber '","EmailAddress":"' . $emailAddress . '","error":""}';
+		$retValue = '{"ID":' . $id . ',"error":""}';
 		sendResultInfoAsJson( $retValue );
 	}
 ?>
