@@ -9,7 +9,7 @@
 	else
 	{
 		$stmt = $conn->prepare("SELECT * FROM Contacts WHERE ID=?");
-		$stmt->bind_param("i", $inData["contactID"]);
+		$stmt->bind_param("i", $inData["contactId"]);
 		$stmt->execute();
 		$result = $stmt->get_result();
 		if( $row = $result->fetch_assoc() )
@@ -45,9 +45,10 @@
 		sendResultInfoAsJson( $retValue );
 	}
 
-	function returnWithInfo( $id )
+	function returnWithInfo( $id, $firstName, $lastName, $phoneNumber, $emailAddress, )
 	{
-		$retValue = '{"ID":' . $id . ',"error":""}';
+		$retValue = '{"ID":' . $id . '"FirstName":"' . $firstName . '","LastName":"' . $lastName .
+		'","PhoneNumber":"' . $phoneNumber '","EmailAddress":"' . $emailAddress . '","error":""}';
 		sendResultInfoAsJson( $retValue );
 	}
 ?>
