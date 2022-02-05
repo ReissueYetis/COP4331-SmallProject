@@ -1,5 +1,5 @@
 const urlBase = 'https://cop4331.acobble.io/';
-const extension = ".php"
+const site = "API/"
 
 const API = {
     login: "Login.php",
@@ -42,7 +42,7 @@ function getLoginInfo(form){
     let formData = {}
     form.serializeArray().map(function(x){formData[x.name] = x.value;});
     formData.password = sha256(formData.password)
-    console.log(formData)
+    //console.log(formData)
     return formData
 }
 
@@ -51,45 +51,50 @@ function getRegInfo(){
     let lastName = document.getElementById("regLName").value
     let login = document.getElementById("regUser").value
     let password = sha256(document.getElementById("regPass").value)
-    //let password = document.getElementById("regPass").value
+    //let password = hashPass(document.getElementById("regPass").value)
+    //let password = hashPass(password)
     return {firstName, lastName, login, password}
 }
 
 function postHandler(data, callback ,endPoint) {
-    console.log(data, endPoint)
+    console.log("POST HANDLER:\n", data, endPoint)
+    let sendData = JSON.stringify(data)
     $.ajax({
-        url: urlBase + endPoint,
-        data: data,
-        type: "POST",
+        url: urlBase + site + endPoint,
+        data: sendData,
+        method: "POST",
+        contentType: "application/json; charset=UTF-8",
         dataType: "json",
         success: function (response, textStatus, xhr) {
+            console.log("\n\tSUCCESS:\n", response, textStatus)
             callback(response, textStatus, xhr)
         },
-        error: function(response, textStatus, xhr){
-            callback(response, textStatus, xhr)
+        error: function(xhr, textStatus, error){
+            console.log("\n\tERROR:\n", textStatus, error)
+            callback(null, textStatus, xhr)
         }
     }).always(function (xhr, status, error) {
-        console.log("IN ALWAYS,\n XHR:\n", xhr, "\nSTATUS:\n", status, "\nERR:\n", error)
+        //console.log("IN ALWAYS,\n XHR:\n", xhr, "\nSTATUS:\n", status, "\nERR:\n", error)
     })
 }
 
 // Callbacks
 function regCB(response, status, xhr){
-    // console.log(response, status, xhr)
+    //console.log("REG CB:", response, status, xhr)
     if (status !== "error") {
         if (response.error === "") {
             $("#regAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.regSucc)
         } else {
             $("#regAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.userExist)
+            $("#regUser").removeClass("is-valid").addClass("is-invalid")
         }
     }else{
         $("#regAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.regErr)
-        $("#regUser").removeClass("is-valid").addClass("is-invalid")
     }
 }
 
 function loginCB(response, status, xhr){
-    console.log(response, status, xhr)
+    //console.log(response, status, xhr)
     if (status !== "error") {
         if (response.error === "") {
             // $("#loginAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.loginSucc)
