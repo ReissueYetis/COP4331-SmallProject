@@ -15,8 +15,7 @@
 		$stmt = $conn->prepare("SELECT * FROM Contacts WHERE ID=?");
 		$stmt->bind_param("i", $contactId);
 		$stmt->execute();
-		returnWithInfo( $row['ID'], $row['FirstName'], $row['LastName'], $row['PhoneNumber'],
-		$row['EmailAddress'], $row['DateCreated'], $row['UserID'] );
+		returnWithInfo( $inData['ID'] );
 		$result = $stmt->get_result();
 		// If search result comes up, delete account
 		if( $row = $result->fetch_assoc() )
@@ -51,12 +50,9 @@
 		sendResultInfoAsJson( $retValue );
 	}
 
-	function returnWithInfo( $id, $firstName, $lastName, $phoneNumber, $emailAddress, $dateCreated,
-	$userId )
+	function returnWithInfo( $id )
 	{
-		$retValue = '{"ID":' . $id . ',"FirstName":"' . $firstName . '","LastName":"' . $lastName .
-		'","PhoneNumber": "' . $phoneNumber . '","EmailAddress":"' . $emailAddress . '","DateCreated":"'
-		. $dateCreated . '","UserID":' . $userId . ',"error":""}';
+		$retValue = '{"ID":' . $id . ',"error":""}';
 		sendResultInfoAsJson( $retValue );
 	}
 ?>
