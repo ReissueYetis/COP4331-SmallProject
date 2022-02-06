@@ -1,4 +1,4 @@
-function makeContactDiv(contact){
+function makeContactDiv(){
   let contactDiv = document.createElement("div");
 }
 
