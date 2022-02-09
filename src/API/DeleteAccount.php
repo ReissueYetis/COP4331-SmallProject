@@ -38,7 +38,7 @@
         }
 
         function returnWithInfo( $login, $password ) {
-                $retValue = '{"login":' . $login . ',"password":"' . $password . '","error":""}';
+                $retValue = '{"login":"' . $login . '","password":"' . $password . '","error":""}';
                 sendResultInfoAsJson( $retValue );
         }
 
