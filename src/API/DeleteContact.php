@@ -1,9 +1,6 @@
 <?php
 	$inData = getRequestInfo();
 
-	$contactId = $inData["contactId"];
-	$deletedContact = "";
-
 	$conn = new mysqli("localhost", "MAINUSER", "COP4331Project!", "COP4331");
 	if ($conn->connect_error)
 	{
@@ -11,19 +8,17 @@
 	}
 	else
 	{
-		// Search to see if an account
 		$stmt = $conn->prepare("SELECT * FROM Contacts WHERE ID=?");
-		$stmt->bind_param("i", $contactId);
+		$stmt->bind_param("i", $inData["contactId"]);
 		$stmt->execute();
-		returnWithInfo( $inData['ID'] );
 		$result = $stmt->get_result();
-		// If search result comes up, delete account
 		if( $row = $result->fetch_assoc() )
 		{
 			$stmt = $conn->prepare("DELETE FROM Contacts WHERE ID=?");
-			$stmt->bind_param("i", $contactId);
-
+			$stmt->bind_param("i", $inData["contactId"]);
 			$stmt->execute();
+			$result = $stmt->get_result();
+			returnWithInfo( $inData["contactId"] );
 		}
 		else
 		{
