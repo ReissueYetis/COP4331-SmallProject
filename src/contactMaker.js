@@ -368,12 +368,14 @@ function addPageButtonListeners(){
 function searchCB(response, textStatus, xhr){
   if (textStatus !== "error") {
     if (response.error === "") {
-      loadContacts(response, 0, 10)
+      loadContacts(response.results, 0, 10)
     } else {
       // TODO: no contacts found error message
     }
   } else {
     // TODO: please try again error msg
+    loadContacts(JSONResults, 0, 10)
+    // console.log(JSONResults)
   }
 
 }

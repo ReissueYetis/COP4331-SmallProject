@@ -42,25 +42,13 @@ function deleteConCB(response, textStatus, xhr){
 
 }
 
-$("#searchForm").on({
-    "keydown": function(event){
-    // event.preventDefault()
+$("#searchForm").on("keypress", function(event){
+        event.stopPropagation()
         let data = {
-            "id" : 55, //readCookie("id")
+            "id" : readCookie("id"), //55
             "search" : $("#searchForm").val()
         }
         postHandler(data, searchCB, API.searchCon)
-    //
-    },
-    "keypress": function(event){
-        if (event.which === 13) {
-            let data = {
-                "id" : 55, //readCookie("id")
-                "search" : $("#searchForm").val()
-            }
-            postHandler(data, searchCB, API.searchCon)
-        }
-    }
 })
 
 // event and validation handling
@@ -208,6 +196,7 @@ function myCallback(status, data) {
     console.log(data);
 }
 
+/*
 function postJSONSearch(url, json_data) {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
@@ -223,6 +212,7 @@ function postJSONSearch(url, json_data) {
         }
     }
 }
+*/
 
-let demoRequest = {"userId":"55","search":""};
-postJSONSearch("https://cop4331.acobble.io/Search.php",demoRequest);
+// let demoRequest = {"userId":"55","search":""};
+// postJSONSearch("https://cop4331.acobble.io/Search.php",demoRequest);
