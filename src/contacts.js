@@ -56,7 +56,7 @@ $(function() {
             event.preventDefault()
             // console.log(event)
             let data = getContactInfo($("#addConForm"))
-            postHandler(data, addConCB, API.delCon)
+            postHandler(data, addConCB, API.addCon)
         },
         rules: {
             firstName: "required",
@@ -114,7 +114,7 @@ $(function() {
         submitHandler: function (form, event){
             event.preventDefault()
             let data = getLoginInfo($("#accDelForm"))
-            postHandler(data, accDeleteCB, API.login)
+            postHandler(data, accDeleteCB, API.delCon)
         },// validation settings for form
         rules: {
             login: "required",
@@ -139,8 +139,17 @@ $("#accDelForm").on("keydown",function(){
 $("#addConForm").on("keydown", function(){
     $("#addConAlert").addClass("collapse").removeClass("alert-danger alert-success")
 })
+
 $("#logoutBtn").click(function (event){
     doLogout()
+})
+
+$(function() {
+    $(document).ready(function(){
+        if (readCookie("id" < 0) || userId < 0){
+            window.location.href = "index.html";
+        }
+    });
 })
 
 // validator settings
