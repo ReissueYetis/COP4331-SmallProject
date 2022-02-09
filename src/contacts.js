@@ -42,10 +42,25 @@ function deleteConCB(response, textStatus, xhr){
 
 }
 
-$("#searchForm").on("search", function(event){
-    event.preventDefault()
-    let data = $("#searchForm").val()
+$("#searchForm").on({
+    "keydown": function(event){
+    // event.preventDefault()
+        let data = {
+            "id" : 55, //readCookie("id")
+            "search" : $("#searchForm").val()
+        }
+        postHandler(data, searchCB, API.searchCon)
     //
+    },
+    "keypress": function(event){
+        if (event.which === 13) {
+            let data = {
+                "id" : 55, //readCookie("id")
+                "search" : $("#searchForm").val()
+            }
+            postHandler(data, searchCB, API.searchCon)
+        }
+    }
 })
 
 // event and validation handling
@@ -144,6 +159,7 @@ $("#logoutBtn").click(function (event){
     doLogout()
 })
 
+/*
 $(function() {
     $(document).ready(function(){
         if (readCookie("id" < 0) || userId < 0){
@@ -151,6 +167,7 @@ $(function() {
         }
     });
 })
+*/
 
 // validator settings
 $(function() {

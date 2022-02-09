@@ -208,12 +208,11 @@ function makeContactInfoDiv(divClass,email,phone){
   ci.appendChild(phoneDiv);
   return ci;
 }
+
 function deleteContact(id){
   let markedContact = document.getElementById(id);
   //ADD API CALL HERE
   markedContact.remove();
-
-
 
 }
 function editContact(id){
@@ -294,6 +293,7 @@ function loadContacts(contacts,lower,upper){
     }
   }
 }
+
 function getContactInfo(contact){
   let email = contact.email;
   let phoneNum = contact.phoneNum;
@@ -320,7 +320,7 @@ function changeInfoState(contactNum){
     applyHidden(editButtons)
     contact.setAttribute("infoHidden","true");
   }
-  }
+}
 function getNextPage(){
 
   // only load next page if there is one
@@ -337,6 +337,7 @@ function getNextPage(){
     }
   }
 }
+
 function getPrevPage(){
   console.log("CURRENT CONTACT IS AT "+ currentContact);
   // Only get prev page if current page is above the
@@ -354,6 +355,7 @@ function getPrevPage(){
     }
   }
 }
+
 function addPageButtonListeners(){
   let prevButton = document.querySelector("#prevButton");
   let nextButton = document.querySelector("#nextButton");
@@ -362,6 +364,21 @@ function addPageButtonListeners(){
 
 
 }
-loadContacts(JSONResults.results,0,10);
+
+function searchCB(response, textStatus, xhr){
+  if (textStatus !== "error") {
+    if (response.error === "") {
+      loadContacts(response, 0, 10)
+    } else {
+      // TODO: no contacts found error message
+    }
+  } else {
+    // TODO: please try again error msg
+  }
+
+}
+
+// loadContacts(JSONResults.results,0,10);
 addPageButtonListeners();
 currentContact+=10;
+
