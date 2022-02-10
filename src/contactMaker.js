@@ -1,190 +1,7 @@
-let JSONResults = {
-  "results": [
-    {
-      "ID": 44,
-      "FirstName": "Mary",
-      "LastName": "Salazar",
-      "PhoneNumber": "206-794-7703",
-      "EmailAddress": "MaryTSalazar@cuvox.de",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 45,
-      "FirstName": "Taylor",
-      "LastName": "Arnold",
-      "PhoneNumber": "928-289-6377",
-      "EmailAddress": "TaylorArnold@jourrapide.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 46,
-      "FirstName": "Brooke",
-      "LastName": "Price",
-      "PhoneNumber": "812-418-0834",
-      "EmailAddress": "BrookePrice@armyspy.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 47,
-      "FirstName": "Ellis",
-      "LastName": "Talbot",
-      "PhoneNumber": "504-313-8784",
-      "EmailAddress": "EllisTalbot@fleckens.hu",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 48,
-      "FirstName": "Katherine",
-      "LastName": "Walters",
-      "PhoneNumber": "614-716-5222",
-      "EmailAddress": "KatherineWalters@teleworm.us",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 49,
-      "FirstName": "Constanza",
-      "LastName": "Anguiano",
-      "PhoneNumber": "817-976-6172",
-      "EmailAddress": "ConstanzaAnguianoMojica@jourrapide.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 50,
-      "FirstName": "Elliot",
-      "LastName": "Faulkner",
-      "PhoneNumber": "770-571-9300",
-      "EmailAddress": "ElliotFaulkner@jourrapide.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 51,
-      "FirstName": "Betty",
-      "LastName": "Call",
-      "PhoneNumber": "936-679-8397",
-      "EmailAddress": "BettyJCall@einrot.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 52,
-      "FirstName": "Adam",
-      "LastName": "Chacón",
-      "PhoneNumber": "609-906-9791",
-      "EmailAddress": "AdamChaconChapa@einrot.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 53,
-      "FirstName": "John",
-      "LastName": "Bartee",
-      "PhoneNumber": "631-269-0057",
-      "EmailAddress": "JohnCBartee@teleworm.us",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 54,
-      "FirstName": "Rosie",
-      "LastName": "Godfrey",
-      "PhoneNumber": "301-740-5717",
-      "EmailAddress": "RosieGodfrey@superrito.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 55,
-      "FirstName": "Matthew",
-      "LastName": "Hines",
-      "PhoneNumber": "618-644-4289",
-      "EmailAddress": "MatthewAHines@superrito.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 56,
-      "FirstName": "Victoria",
-      "LastName": "Watson",
-      "PhoneNumber": "614-993-8075",
-      "EmailAddress": "VictoriaJWatson@gustr.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 57,
-      "FirstName": "Carlos",
-      "LastName": "Lebeau",
-      "PhoneNumber": "417-955-8587",
-      "EmailAddress": "CarlosPLebeau@dayrep.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 58,
-      "FirstName": "Imogen",
-      "LastName": "Wheeler",
-      "PhoneNumber": "757-486-2389",
-      "EmailAddress": "ImogenWheeler@einrot.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 59,
-      "FirstName": "Neil",
-      "LastName": "Bryant",
-      "PhoneNumber": "319-296-3608",
-      "EmailAddress": "NeilJBryant@dayrep.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 60,
-      "FirstName": "Thomas",
-      "LastName": "Davis",
-      "PhoneNumber": "608-395-7694",
-      "EmailAddress": "ThomasDavis@fleckens.hu",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 61,
-      "FirstName": "Melissa",
-      "LastName": "Morales",
-      "PhoneNumber": "513-564-6489",
-      "EmailAddress": "MelissaKMorales@einrot.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 62,
-      "FirstName": "Ciara",
-      "LastName": "Nieto",
-      "PhoneNumber": "323-778-6481",
-      "EmailAddress": "CiaraNietoBarrera@cuvox.de",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 63,
-      "FirstName": "Ademar",
-      "LastName": "Briones",
-      "PhoneNumber": "901-619-7623",
-      "EmailAddress": "AdemarBrionesMendoza@jourrapide.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    }
-  ],
-  "error": ""
-};
 let currentContact = 0;
 const CONTACTS_PER_PAGE = 10;
+let currentContact;
+let userID;
 function makeContactDiv(contact,number){
   let contactDiv = document.createElement("div");
   appendContactChildren(contact,contactDiv,number);
@@ -368,7 +185,17 @@ function addPageButtonListeners(){
 
 
 }
+function addSearchBarEL(){
+  let searchBar = document.querySelector("searchBar");
+  // on every change to the search bar there will be a search executed
+  searchBar.addEventListener("input",function(){searchAndUpdate(userID)});
 
+
+
+}
+function searchAndUpdate(id){
+
+}
 function searchCB(response, textStatus, xhr){
   if (textStatus !== "error") {
     if (response.error === "") {
@@ -383,8 +210,14 @@ function searchCB(response, textStatus, xhr){
   }
 
 }
-
+// this will get the ID of the current user with a cookie as well as call the empty search
+// which will fill the page
+function loadInitialPageState(){
+  userID = readCookie("id");
+  console.log(userID);
+}
 // loadContacts(JSONResults.results,0,10);
 addPageButtonListeners();
+addSearchBarEL():
 currentContact+=10;
 
