@@ -1,6 +1,6 @@
 let currentContact = 0;
 const CONTACTS_PER_PAGE = 10;
-let currentContact;
+// let currentContact;
 let userID;
 function makeContactDiv(contact,number){
   let contactDiv = document.createElement("div");
@@ -29,12 +29,16 @@ function makeContactInfoDiv(divClass,email,phone){
 function deleteContact(id){
   let markedContact = document.getElementById(id);
   //ADD API CALL HERE
+  postHandler()
   markedContact.remove();
 
 }
+
+
 function editContact(id){
 
 }
+
 // this takes the div class attribute as well as  the inner content
 function makeEditAndDeleteButtonDiv(contactID){
   let newRow = document.createElement("div");
@@ -49,8 +53,6 @@ function makeEditAndDeleteButtonDiv(contactID){
   newRow.appendChild(editButton);
   newRow.appendChild(deleteButton);
   return newRow;
-
-
 
 }
 function appendContactChildren(contact,contactDiv,number){
@@ -182,20 +184,19 @@ function addPageButtonListeners(){
   let nextButton = document.querySelector("#nextButton");
   prevButton.addEventListener("click",function(){getPrevPage()});
   nextButton.addEventListener("click",function(){getNextPage()});
-
-
 }
+/*
 function addSearchBarEL(){
   let searchBar = document.querySelector("searchBar");
   // on every change to the search bar there will be a search executed
   searchBar.addEventListener("input",function(){searchAndUpdate(userID)});
-
-
-
 }
+*/
+
 function searchAndUpdate(id){
 
 }
+
 function searchCB(response, textStatus, xhr){
   if (textStatus !== "error") {
     if (response.error === "") {
@@ -218,6 +219,6 @@ function loadInitialPageState(){
 }
 // loadContacts(JSONResults.results,0,10);
 addPageButtonListeners();
-addSearchBarEL():
+// addSearchBarEL()
 currentContact+=10;
 
