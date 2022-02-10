@@ -294,6 +294,7 @@ function loadContacts(contacts,lower,upper){
   }
 }
 
+/*
 function getContactInfo(contact){
   let email = contact.email;
   let phoneNum = contact.phoneNum;
@@ -301,6 +302,8 @@ function getContactInfo(contact){
   contactInfoDiv.innerHTML = email + "  "+ phoneNum;
   return contactInfoDiv;
 }
+*/
+
 // this function changes state of info from hidden to showing or vis-versa
 function changeInfoState(contactNum){
   let contact = document.getElementById(contactNum);
@@ -321,14 +324,15 @@ function changeInfoState(contactNum){
     contact.setAttribute("infoHidden","true");
   }
 }
-function getNextPage(){
+function getNextPage(response, textStatus, xhr){
 
   // only load next page if there is one
   if(currentContact < JSONResults.results.length){
     // if loading the next amount of contacts will go over the length
     // just go up to length
     if(currentContact + (CONTACTS_PER_PAGE) > JSONResults.results.length){
-      loadContacts(JSONResults.results,currentContact,JSONResults.results.length);
+      //loadContacts(JSONResults.results,currentContact,JSONResults.results.length);
+      loadContacts(response.results, currentContact,response.results.length)
       currentContact = JSONResults.results.length;
     }
     else{

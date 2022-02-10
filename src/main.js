@@ -201,7 +201,7 @@ $("#regForm").on("keydown", function(){
 function doLogin() {
     console.log(document.cookie)
     if (readCookie("id") > 0) {
-     //   window.location.href = "home.html";
+       window.location.href = "home.html";
     }
 }
 

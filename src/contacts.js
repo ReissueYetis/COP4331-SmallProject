@@ -1,6 +1,8 @@
 function getContactInfo(form) {
-    let contact = {}
-    contact = $.extend({id: userId}, form.serializeArray().map(function(x){ {}[x.name] = x.value }))
+    let data = {}
+    form.serializeArray().map(function(x){ data[x.name] = x.value })
+    let contact = {"userID": readCookie("id")}
+    contact = $.extend(contact, data)
     // console.log(contact)
     return contact
 }
@@ -43,12 +45,12 @@ function deleteConCB(response, textStatus, xhr){
 }
 
 $("#searchForm").on("keypress", function(event){
-        event.stopPropagation()
-        let data = {
-            "id" : readCookie("id"), //55
-            "search" : $("#searchForm").val()
-        }
-        postHandler(data, searchCB, API.searchCon)
+    event.stopPropagation()
+    let data = {
+        "userId" : readCookie("id"), //55
+        "search" : $("#searchForm").val()
+    }
+    postHandler(data, searchCB, API.searchCon)
 })
 
 // event and validation handling
@@ -147,15 +149,14 @@ $("#logoutBtn").click(function (event){
     doLogout()
 })
 
-/*
+
 $(function() {
     $(document).ready(function(){
-        if (readCookie("id" < 0) || userId < 0){
+        if (readCookie("id") < 0){
             window.location.href = "index.html";
         }
     });
 })
-*/
 
 // validator settings
 $(function() {
@@ -165,25 +166,25 @@ $(function() {
 })
 // $.validator.setDefaults({});
 function makeContactDiv(contact){
-  let contactDiv = document.createElement("div");
+    let contactDiv = document.createElement("div");
 }
 
 function fillContactDiv(contact,contactDiv){
-  // setting contact attributes
-  contact.setAttribute("class","contact");
-  contact.setAttribute("id",contact.ID);
-  // adding the name part
-  let contactName = document.createElement("div");
-  contactName.setAttribute("class","contactNameText");
-  contactName.innerHTML = contact.firstName +" "+contact.lastName;
-  // add the button
-  let extendButton = document.createElement("button");
-  extendButton.setAttribute("class","contactExtendButton");
-  extendButton.setAttribute("contactID",contact.ID);
-  // here we would add the event listener
-  contact.appendChild(contactName);
+    // setting contact attributes
+    contact.setAttribute("class","contact");
+    contact.setAttribute("id",contact.ID);
+    // adding the name part
+    let contactName = document.createElement("div");
+    contactName.setAttribute("class","contactNameText");
+    contactName.innerHTML = contact.firstName +" "+contact.lastName;
+    // add the button
+    let extendButton = document.createElement("button");
+    extendButton.setAttribute("class","contactExtendButton");
+    extendButton.setAttribute("contactID",contact.ID);
+    // here we would add the event listener
+    contact.appendChild(contactName);
 }
-
+/*
 function getContactInfo(contact){
   let email = contact.email;
   let phoneNum = contact.phoneNum;
@@ -191,7 +192,7 @@ function getContactInfo(contact){
   contactInfoDiv.innerHTML = email + "  "+ phoneNum;
   return contactInfoDiv;
 }
-
+*/
 function myCallback(status, data) {
     console.log(data);
 }
