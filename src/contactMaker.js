@@ -1,7 +1,6 @@
 let currentContact = 0;
 const CONTACTS_PER_PAGE = 10;
-// let currentContact;
-let userID;
+let currentResults;
 function makeContactDiv(contact,number){
   let contactDiv = document.createElement("div");
   appendContactChildren(contact,contactDiv,number);
@@ -28,17 +27,15 @@ function makeContactInfoDiv(divClass,email,phone){
 
 function deleteContact(id){
   let markedContact = document.getElementById(id);
-  //ADD API CALL HERE
-  postHandler()
+  if(window.confirm("Are you sure you want to delete this contact?")){
   markedContact.remove();
+  //ADD API CALL HERE
+  }
 
 }
-
-
 function editContact(id){
 
 }
-
 // this takes the div class attribute as well as  the inner content
 function makeEditAndDeleteButtonDiv(contactID){
   let newRow = document.createElement("div");
@@ -48,11 +45,14 @@ function makeEditAndDeleteButtonDiv(contactID){
   let deleteButton = document.createElement("button");
   editButton.setAttribute("class","col text-right editContactButton");
   deleteButton.setAttribute("class","col removeContactButton");
+  deleteButton.addEventListener("click",function(){ deleteContact(contactID) });
   editButton.innerHTML = "Edit Contact";
   deleteButton.innerHTML = "Remove Contact";
   newRow.appendChild(editButton);
   newRow.appendChild(deleteButton);
   return newRow;
+
+
 
 }
 function appendContactChildren(contact,contactDiv,number){
@@ -113,7 +113,6 @@ function loadContacts(contacts,lower,upper){
   }
 }
 
-/*
 function getContactInfo(contact){
   let email = contact.email;
   let phoneNum = contact.phoneNum;
@@ -121,8 +120,6 @@ function getContactInfo(contact){
   contactInfoDiv.innerHTML = email + "  "+ phoneNum;
   return contactInfoDiv;
 }
-*/
-
 // this function changes state of info from hidden to showing or vis-versa
 function changeInfoState(contactNum){
   let contact = document.getElementById(contactNum);
@@ -143,19 +140,18 @@ function changeInfoState(contactNum){
     contact.setAttribute("infoHidden","true");
   }
 }
-function getNextPage(response, textStatus, xhr){
+function getNextPage(){
 
   // only load next page if there is one
-  if(currentContact < JSONResults.results.length){
+  if(currentContact < currentResults.length){
     // if loading the next amount of contacts will go over the length
     // just go up to length
-    if(currentContact + (CONTACTS_PER_PAGE) > JSONResults.results.length){
-      //loadContacts(JSONResults.results,currentContact,JSONResults.results.length);
-      loadContacts(response.results, currentContact,response.results.length)
-      currentContact = JSONResults.results.length;
+    if(currentContact + (CONTACTS_PER_PAGE) > currentResults.length){
+      loadContacts(currentResults,currentContact,currentResults.length);
+      currentContact = currentResults.length;
     }
     else{
-      loadContacts(JSONResults.results,currentContact,currentContact+(CONTACTS_PER_PAGE*2));
+      loadContacts(currentResults,currentContact,currentContact+(CONTACTS_PER_PAGE*2));
       currentContact+=CONTACTS_PER_PAGE;
     }
   }
@@ -168,7 +164,7 @@ function getPrevPage(){
     // if there are less contacts to be loaded than the amount per page
     // just go to the last one that can be loaded
     if(currentContact-(CONTACTS_PER_PAGE*2) >= 0){
-      loadContacts(JSONResults.results,currentContact-(CONTACTS_PER_PAGE*2),currentContact-CONTACTS_PER_PAGE);
+      loadContacts(currentResults,currentContact-(CONTACTS_PER_PAGE*2),currentContact-CONTACTS_PER_PAGE);
       currentContact -= CONTACTS_PER_PAGE;
     }
     else{
@@ -184,23 +180,28 @@ function addPageButtonListeners(){
   let nextButton = document.querySelector("#nextButton");
   prevButton.addEventListener("click",function(){getPrevPage()});
   nextButton.addEventListener("click",function(){getNextPage()});
+
+
 }
-/*
 function addSearchBarEL(){
   let searchBar = document.querySelector("searchBar");
   // on every change to the search bar there will be a search executed
   searchBar.addEventListener("input",function(){searchAndUpdate(userID)});
-}
-*/
 
+
+
+}
 function searchAndUpdate(id){
+  // first get search bar contents
+
 
 }
-
 function searchCB(response, textStatus, xhr){
   if (textStatus !== "error") {
     if (response.error === "") {
-      loadContacts(response.results, 0, 10)
+      updatePageState(response.results)
+      loadContacts(currentContacts,0,CONTACTS_PER_PAGE);
+      currentContact = CONTACTS_PER_PAGE;
     } else {
       // TODO: no contacts found error message
     }
@@ -209,7 +210,6 @@ function searchCB(response, textStatus, xhr){
     loadContacts(JSONResults, 0, 10)
     // console.log(JSONResults)
   }
-
 }
 // this will get the ID of the current user with a cookie as well as call the empty search
 // which will fill the page
@@ -217,8 +217,10 @@ function loadInitialPageState(){
   userID = readCookie("id");
   console.log(userID);
 }
-// loadContacts(JSONResults.results,0,10);
-addPageButtonListeners();
-// addSearchBarEL()
-currentContact+=10;
+function updatePageState(results){
+  currentResults = results;
+}
 
+addSearchBarEL():
+postHandler({userId:userID, search:""},searchCB,API.searchCon);
+addPageButtonListeners();
