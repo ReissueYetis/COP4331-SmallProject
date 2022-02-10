@@ -1,4 +1,6 @@
-function getContactInfo(form) {
+let addConForm =  $("#addConForm")
+
+function getFormInfo(form) {
     let data = {}
     form.serializeArray().map(function(x){ data[x.name] = x.value })
     let contact = {"userID": readCookie("id")}
@@ -40,27 +42,36 @@ function addConCB(response, status, xhr){
 function editConCB(response, textStatus, xhr){
 
 }
+
 function deleteConCB(response, textStatus, xhr){
 
 }
 
-$("#searchForm").on("keypress", function(event){
+$("#searchBar").on("keyup", function(event){
+    // console.log(event)
     event.stopPropagation()
     let data = {
         "userId" : readCookie("id"), //55
-        "search" : $("#searchForm").val()
+        "search" : $("#searchBar").val()
     }
+    console.log(data)
     postHandler(data, searchCB, API.searchCon)
+})
+
+// resets add contact form fields and validation
+$("#addConModal").on("hide.bs.modal", function(event){
+    addConForm[0].reset()
+    $("#addConForm").validate().resetForm()
 })
 
 // event and validation handling
 $(function() {
     // add contact
-    $("#addConForm").validate({
+    addConForm.validate({
         submitHandler: function (form, event) {
             event.preventDefault()
             // console.log(event)
-            let data = getContactInfo($("#addConForm"))
+            let data = getFormInfo($("#addConForm"))
             postHandler(data, addConCB, API.addCon)
         },
         rules: {
@@ -93,7 +104,7 @@ $(function() {
             event.preventDefault()
             event.stopPropagation()
             // console.log(event)
-            let data = getContactInfo($("#editConForm"))
+            let data = getFormInfo($("#editConForm"))
             postHandler(data, editConCB, API.editCon)
         },
         rules: {
@@ -141,7 +152,7 @@ $("#editConForm").on("keydown", function(){
 $("#accDelForm").on("keydown",function(){
     $("#delAccAlert").addClass("collapse").removeClass("alert-danger alert-success")
 })
-$("#addConForm").on("keydown", function(){
+addConForm.on("keydown", function(){
     $("#addConAlert").addClass("collapse").removeClass("alert-danger alert-success")
 })
 
@@ -193,8 +204,8 @@ function getContactInfo(contact){
   return contactInfoDiv;
 }
 */
-function myCallback(status, data) {
-    console.log(data);
+function myCallback(response, status, xhr) {
+    console.log(response + "\n", status+"\n", xhr+"\n");
 }
 
 /*
