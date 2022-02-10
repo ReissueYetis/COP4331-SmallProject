@@ -185,6 +185,9 @@ function addSearchBarEL(){
   let searchBar = document.querySelector("searchBar");
   // on every change to the search bar there will be a search executed
   searchBar.addEventListener("input",function(){searchAndUpdate(userID)});
+
+
+
 }
 function searchAndUpdate(id){
 
@@ -206,7 +209,8 @@ function searchCB(response, textStatus, xhr){
 // this will get the ID of the current user with a cookie as well as call the empty search
 // which will fill the page
 function loadInitialPageState(){
-
+  userID = readCookie("id");
+  console.log(userID);
 }
 // loadContacts(JSONResults.results,0,10);
 addPageButtonListeners();
