@@ -34,6 +34,8 @@ function deleteContact(id){
 
 }
 function editContact(id){
+  let curContact = document.getElementById(id);
+  curContact.queryS
 
 }
 // this takes the div class attribute as well as  the inner content
@@ -71,7 +73,7 @@ function appendContactChildren(contact,contactDiv,number){
   let additionalInfo = document.createElement("div");
   additionalInfo.setAttribute("class","additionalInfo");
   additionalInfo.appendChild(makeContactInfoDiv("additionalInfoHeaders","Email","Phone"))
-  additionalInfo.appendChild(makeContactInfoDiv("additionalInfoContent",contact.EmailAddress,contact.PhoneNumber));
+  let contactInfo =  makeContactInfoDiv("additionalInfoContent",contact.EmailAddress,contact.PhoneNumber)
   // now we append the children
   let editButtons = makeEditAndDeleteButtonDiv(number);
   contactDiv.appendChild(contactName);
@@ -193,8 +195,9 @@ function addSearchBarEL(){
 }
 function searchAndUpdate(id){
   // first get search bar contents
+  let searchBar = document.querySelector("#searchBar");
 
-
+  postHandler({userId:userID, search:searchBar.value},searchCB,API.searchCon);
 }
 function searchCB(response, textStatus, xhr){
   if (textStatus !== "error") {
