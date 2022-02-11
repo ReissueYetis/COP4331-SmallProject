@@ -213,7 +213,9 @@ function getNextPage(){
 }
 
 function getPrevPage(){
-    loadContacts(currentResults,0,10);
+  loadContacts(currentResults,0,10);
+  currentContact = 10;
+
 }
 
 function addPageButtonListeners(){
