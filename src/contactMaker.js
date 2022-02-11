@@ -26,6 +26,20 @@ function makeContactInfoDiv(divClass,email,phone){
   ci.appendChild(phoneDiv);
   return ci;
 }
+function makeContactInfoContentDiv(divClass,email,phone){
+  let ci = document.createElement("div");
+  ci.setAttribute("class","row "+divClass);
+  let emailDiv = document.createElement("div");
+  emailDiv.setAttribute("class","col contactInfoText emailText");
+  emailDiv.innerHTML = email;
+  let phoneDiv= document.createElement("div");
+  phoneDiv.setAttribute("class","col contactInfoText phoneText");
+  phoneDiv.innerHTML = phone;
+  ci.appendChild(emailDiv);
+  ci.appendChild(phoneDiv);
+  return ci;
+}
+
 
 // adds a contact
 function addConCB(response, status, xhr){
@@ -53,35 +67,7 @@ function deleteContact(id){
   let markedContact = document.getElementById(id);
   if(window.confirm("Are you sure you want to delete this contact?")){
     let data = {contactId:id};
-    console.log(data, "\nIn"+ API.delCon);
-    //API CALL
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", urlBase + site + API.delCon, true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.responseType = "json";
-    console.log(JSON.stringify(data));
-    console.log(urlBase + site + API.delCon);
-    xhr.send(JSON.stringify(data));
-    xhr.onload = function() {
-      var status = xhr.status;
-      if (status === 200) {
-        if (xhr.response.error === "") {
-          markedContact.remove();
-          window.alert("Contact successfully deleted")
-        } else {
-          window.alert("Contact does not exist")
-        }
-      }
-    }
-    console.log('HEY');
-  }
-}
-/*
-function deleteContact(id){
-  let markedContact = document.getElementById(id);
-  let data = {"contactId": id};
-  console.log(data, "\n In "+ API.delCon)
-  if(window.confirm("Are you sure you want to delete this contact?")){
+    console.log(data, "\nIn"+ API.delCon)
     //API CALL
     $.ajax({
       url: urlBase + site + API.delCon,
@@ -103,17 +89,65 @@ function deleteContact(id){
         window.alert("Communication error, please try again")
       }
     }).always(function (xhr, status, error) {
-      // console.log("IN ALWAYS,\n XHR:", xhr, "\nSTATUS:\n", status, "\nERR:\n", error)
+      console.log("IN ALWAYS,\n XHR:", xhr, "\nSTATUS:\n", status, "\nERR:\n", error)
     })
   }
-}*/
+}
+function makeEditButtons(contactID){
+  let newRow = document.createElement("div");
+  newRow.setAttribute("class","row editButtons");
+  newRow.setAttribute("contactID",contactID);
+  let confirmEditButton = document.createElement("button");
+  let rejectEditButton = document.createElement("button");
+  confirmEditButton.setAttribute("class","col text-right editContactButton");
+  rejectEditButton.setAttribute("class","col removeContactButton");
+  rejectEditButton.addEventListener("click",function(){ rejectEdit() });
+  confirmEditButton.addEventListener("click",function(){ confirmEdit(contactID) });
+  confirmEditButton.innerHTML = "Confirm Edit";
+  rejectEditButton.innerHTML = "Reject Edit";
+  newRow.appendChild(confirmEditButton);
+  newRow.appendChild(rejectEditButton);
+  return newRow;
+}
 
 // TODO: editcontact placeholder
-function editContact(id){
+function prepareDivEditContact(id){
   let curContact = document.getElementById(id);
+  // make the new name div and input fields
+  let inputRow = curContact.querySelector(".contactNameText");
+  let firstNameInput = document.createElement("input");
+  let lastNameInput = document.createElement("input");
+  // Set attributes
+  firstNameInput.setAttribute("value",inputRow.getAttribute("firstname"));
+  firstNameInput.setAttribute("class","firstname col");
+  lastNameInput.setAttribute("value",inputRow.getAttribute("lastname"));
+  firstNameInput.setAttribute("class","lastname col");
+  // append the children to the row class
+  inputRow.innerHTML = "";
+  inputRow.appendChild(firstNameInput);
+  inputRow.appendChild(lastNameInput);
+  // do the same for email and phone
+  let additionalInfoContentDiv = curContact.querySelector(".additionalInfoContent");
+  let oldPhoneDiv = curContact.querySelector(".phoneText");
+  let oldEmailDiv = curContact.querySelector(".emailText");
+  let newPhoneDiv = document.createElement("input");
+  let newEmailDiv = document.createElement("input");
+  newPhoneDiv.setAttribute("value",oldPhoneDiv.innerHTML);
+  newEmailDiv.setAttribute("value",oldEmailDiv.innerHTML);
+  newPhoneDiv.setAttribute("class","phoneText contactInfoText col");
+  newEmailDiv.setAttribute("class","emailText contactInfoText col");
+  additionalInfoContentDiv.innerHTML = "";
+  additionalInfoContentDiv.appendChild(newEmailDiv);
+  additionalInfoContentDiv.appendChild(newPhoneDiv);
+  // remove old buttons
+  curContact.querySelector(".editButtons").remove();
+  curContact.appendChild(makeEditButtons(id));
+}
 
+
+function apiCallForEdit(){
   // get data stuff here
-  let data
+  let data;
 
   // API call
   console.log(data, "\nIn"+ API.editCon)
@@ -164,6 +198,8 @@ function appendContactChildren(contact,contactDiv,number){
   // Below is for the name title
   let contactName = document.createElement("div");
   contactName.setAttribute("class","contactNameText col");
+  contactName.setAttribute("firstName",contact.FirstName);
+  contactName.setAttribute("lastName",contact.LastName);
   contactName.innerHTML = contact.FirstName +" "+contact.LastName;
   // the extend button
   let extendButton = document.createElement("button");
@@ -175,7 +211,7 @@ function appendContactChildren(contact,contactDiv,number){
   let additionalInfo = document.createElement("div");
   additionalInfo.setAttribute("class","additionalInfo");
   additionalInfo.appendChild(makeContactInfoDiv("additionalInfoHeaders","Email","Phone"))
-  let contactInfo =  makeContactInfoDiv("additionalInfoContent",contact.EmailAddress,contact.PhoneNumber)
+  let contactInfo =  makeContactInfoContentDiv("additionalInfoContent",contact.EmailAddress,contact.PhoneNumber)
   // now we append the children
   let editButtons = makeEditAndDeleteButtonDiv(number);
   contactDiv.appendChild(contactName);
