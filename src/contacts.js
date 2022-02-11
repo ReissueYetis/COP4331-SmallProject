@@ -24,29 +24,6 @@ function accDeleteCB(response, textStatus, xhr){
     }
 }
 
-//TODO: finish functions to process search, add, edit, and delete for client
-function addConCB(response, status, xhr){
-    if (status !== "error") {
-        if (response.error === "") {
-            $("#addConAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.regSucc)
-            // do something with new contact here
-        } else {
-            $("#addConAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.userExist)
-            // $("#loginPass").removeClass("is-valid")
-            // $("#loginUser").removeClass("is-valid")
-        }
-    } else {
-        $("#addConAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.addConErr)
-    }
-}
-function editConCB(response, textStatus, xhr){
-
-}
-
-function deleteConCB(response, textStatus, xhr){
-
-}
-
 $("#searchBar").on("keyup", function(event){
     // console.log(event)
     event.stopPropagation()
@@ -54,14 +31,8 @@ $("#searchBar").on("keyup", function(event){
         "userId" : readCookie("id"), //55
         "search" : $("#searchBar").val()
     }
-    console.log(data)
+    // console.log(data)
     postHandler(data, searchCB, API.searchCon)
-})
-
-// resets add contact form fields and validation
-$("#addConModal").on("hide.bs.modal", function(event){
-    addConForm[0].reset()
-    $("#addConForm").validate().resetForm()
 })
 
 // event and validation handling
@@ -146,6 +117,14 @@ $(function() {
         }
     })
 })
+
+// functions to reset form fields and validation
+$("#addConModal").on("hide.bs.modal", function(event){
+    addConForm[0].reset()
+    $("#addConForm").validate().resetForm()
+    $("#addConAlert").addClass("collapse").removeClass("alert-danger alert-success")
+})
+
 $("#editConForm").on("keydown", function(){
     // $("#editAlert").addClass("collapse").removeClass("alert-danger alert-success")
 })
@@ -204,8 +183,8 @@ function getContactInfo(contact){
   return contactInfoDiv;
 }
 */
-function myCallback(response, status, xhr) {
-    console.log(response + "\n", status+"\n", xhr+"\n");
+function basicCallback(response, status, xhr) {
+    console.log("GENERIC CALLBACK\n", response + "\n", status+"\n", xhr+"\n");
 }
 
 /*

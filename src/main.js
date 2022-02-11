@@ -66,11 +66,11 @@ function postHandler(data, callback ,endPoint) {
         contentType: "application/json; charset=UTF-8",
         dataType: "json",
         success: function (response, textStatus, xhr) {
-            console.log("\n\tSUCCESS:\n", response, textStatus)
+            console.log("\n\t" + endPoint + ": SUCCESS:\n", response, textStatus)
             callback(response, textStatus, xhr)
         },
         error: function(xhr, textStatus, error){
-            console.log("\n\tERROR:\n", textStatus, error)
+            console.log("\n\t" + endPoint + ": ERROR:\n", textStatus, error)
             callback(null, textStatus, xhr)
         }
     }).always(function (xhr, status, error) {
@@ -182,6 +182,18 @@ $(function() {
         }
     })
 })
+
+// functions to reset form fields and validation
+$("#registerModal").on("hide.bs.modal", function(event){
+    // addConForm[0].reset()
+    $("#regForm").validate().resetForm()
+    $("#regAlert").addClass("collapse").removeClass("alert-danger alert-success")
+})
+$("#regForm").on("keydown", function(){
+    $("#regAlert").addClass("collapse").removeClass("alert-danger alert-success")
+    // $("#regUser").removeClass("is-valid").removeClass("is-invalid")
+})
+
 $("#loginForm").on({
     "keydown": function () {
         $("#loginAlert").addClass("collapse").removeClass("alert-danger alert-success")
@@ -192,10 +204,6 @@ $("#loginForm").on({
         // $("#loginPass").removeClass("is-valid")
         // $("#loginUser").removeClass("is-valid")
     }
-})
-$("#regForm").on("keydown", function(){
-    $("#regAlert").addClass("collapse").removeClass("alert-danger alert-success")
-    // $("#regUser").removeClass("is-valid").removeClass("is-invalid")
 })
 
 function doLogin() {
@@ -240,7 +248,7 @@ function readCookie(key) {
         //     userId = parseInt(tokens[1].trim());
         // }
     }
-    // return userId >= 0;
+    return "";
 }
 
 // global validation settings

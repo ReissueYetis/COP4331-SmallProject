@@ -27,15 +27,57 @@ function makeContactInfoDiv(divClass,email,phone){
   return ci;
 }
 
+// adds a contact
+function addConCB(response, status, xhr){
+  let newContact
+  if (status !== "error") {
+    if (response.error === "") {
+      $("#addConAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.regSucc)
+      let searchData = {
+        "userId" : readCookie("id"), //55
+        "search" : $("#searchBar").val()
+      }
+      postHandler(searchData, searchCB, API.searchCon)
+    } else {
+      $("#addConAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.userExist)
+      // $("#loginPass").removeClass("is-valid")
+      // $("#loginUser").removeClass("is-valid")
+    }
+  } else {
+    $("#addConAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.addConErr)
+  }
+}
+
 function deleteContact(id){
   let markedContact = document.getElementById(id);
   if(window.confirm("Are you sure you want to delete this contact?")){
     let data = markedContact.ID
-    markedContact.remove();
-    //ADD API CALL HERE
-    postHandler(data, myCallback, API.delCon)
+    //API CALL
+    $.ajax({
+      url: urlBase + site + API.delCon,
+      data: data,
+      method: "POST",
+      contentType: "application/json; charset=UTF-8",
+      dataType: "json",
+      success: function (response, textStatus, xhr) {
+        console.log(API.delCon, " SUCCESS:\n", response, textStatus)
+        if (textStatus !== "error") {
+          if (response.error === "") {
+            markedContact.remove();
+            window.alert("Contact successfully deleted")
+          } else {
+            window.alert("Contact does not exist")
+          }
+        }
+      },
+      error: function(xhr, textStatus, error){
+        console.log("\n\tERROR:\n", textStatus, error)
+        window.alert("Communication error, please try again")
+      }
+    }).always(function (xhr, status, error) {
+      console.log("IN ALWAYS,\n XHR:", xhr, "\nSTATUS:\n", status, "\nERR:\n", error)
+    })
   }
-
 }
 
 function editContact(id){
@@ -119,7 +161,6 @@ function loadContacts(contacts,lower,upper){
     }
   }
 }
-
 
 function getContactInfo(contact){
   let email = contact.email;
@@ -219,8 +260,8 @@ function searchCB(response, textStatus, xhr){
     }
   } else {
     // TODO: please try again error msg
-    updatePageState(JSONResults.results)
-    loadContacts(JSONResults.results, 0, CONTACTS_PER_PAGE)
+    // updatePageState(JSONResults.results)
+    // loadContacts(JSONResults.results, 0, CONTACTS_PER_PAGE)
     // console.log(JSONResults)
   }
 }
@@ -237,189 +278,3 @@ function updatePageState(results){
 // addSearchBarEL()
 // postHandler({userId:userID, search:""},searchCB,API.searchCon);
 addPageButtonListeners();
-
-let JSONResults = {
-  "results": [
-    {
-      "ID": 44,
-      "FirstName": "Mary",
-      "LastName": "Salazar",
-      "PhoneNumber": "206-794-7703",
-      "EmailAddress": "MaryTSalazar@cuvox.de",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 45,
-      "FirstName": "Taylor",
-      "LastName": "Arnold",
-      "PhoneNumber": "928-289-6377",
-      "EmailAddress": "TaylorArnold@jourrapide.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 46,
-      "FirstName": "Brooke",
-      "LastName": "Price",
-      "PhoneNumber": "812-418-0834",
-      "EmailAddress": "BrookePrice@armyspy.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 47,
-      "FirstName": "Ellis",
-      "LastName": "Talbot",
-      "PhoneNumber": "504-313-8784",
-      "EmailAddress": "EllisTalbot@fleckens.hu",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 48,
-      "FirstName": "Katherine",
-      "LastName": "Walters",
-      "PhoneNumber": "614-716-5222",
-      "EmailAddress": "KatherineWalters@teleworm.us",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 49,
-      "FirstName": "Constanza",
-      "LastName": "Anguiano",
-      "PhoneNumber": "817-976-6172",
-      "EmailAddress": "ConstanzaAnguianoMojica@jourrapide.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 50,
-      "FirstName": "Elliot",
-      "LastName": "Faulkner",
-      "PhoneNumber": "770-571-9300",
-      "EmailAddress": "ElliotFaulkner@jourrapide.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 51,
-      "FirstName": "Betty",
-      "LastName": "Call",
-      "PhoneNumber": "936-679-8397",
-      "EmailAddress": "BettyJCall@einrot.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 52,
-      "FirstName": "Adam",
-      "LastName": "Chacón",
-      "PhoneNumber": "609-906-9791",
-      "EmailAddress": "AdamChaconChapa@einrot.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 53,
-      "FirstName": "John",
-      "LastName": "Bartee",
-      "PhoneNumber": "631-269-0057",
-      "EmailAddress": "JohnCBartee@teleworm.us",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 54,
-      "FirstName": "Rosie",
-      "LastName": "Godfrey",
-      "PhoneNumber": "301-740-5717",
-      "EmailAddress": "RosieGodfrey@superrito.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 55,
-      "FirstName": "Matthew",
-      "LastName": "Hines",
-      "PhoneNumber": "618-644-4289",
-      "EmailAddress": "MatthewAHines@superrito.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 56,
-      "FirstName": "Victoria",
-      "LastName": "Watson",
-      "PhoneNumber": "614-993-8075",
-      "EmailAddress": "VictoriaJWatson@gustr.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 57,
-      "FirstName": "Carlos",
-      "LastName": "Lebeau",
-      "PhoneNumber": "417-955-8587",
-      "EmailAddress": "CarlosPLebeau@dayrep.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 58,
-      "FirstName": "Imogen",
-      "LastName": "Wheeler",
-      "PhoneNumber": "757-486-2389",
-      "EmailAddress": "ImogenWheeler@einrot.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 59,
-      "FirstName": "Neil",
-      "LastName": "Bryant",
-      "PhoneNumber": "319-296-3608",
-      "EmailAddress": "NeilJBryant@dayrep.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 60,
-      "FirstName": "Thomas",
-      "LastName": "Davis",
-      "PhoneNumber": "608-395-7694",
-      "EmailAddress": "ThomasDavis@fleckens.hu",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 61,
-      "FirstName": "Melissa",
-      "LastName": "Morales",
-      "PhoneNumber": "513-564-6489",
-      "EmailAddress": "MelissaKMorales@einrot.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 62,
-      "FirstName": "Ciara",
-      "LastName": "Nieto",
-      "PhoneNumber": "323-778-6481",
-      "EmailAddress": "CiaraNietoBarrera@cuvox.de",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    },
-    {
-      "ID": 63,
-      "FirstName": "Ademar",
-      "LastName": "Briones",
-      "PhoneNumber": "901-619-7623",
-      "EmailAddress": "AdemarBrionesMendoza@jourrapide.com",
-      "DateCreated": "2022-02-03 20:59:00",
-      "UserID": 55
-    }
-  ],
-  "error": ""
-};
