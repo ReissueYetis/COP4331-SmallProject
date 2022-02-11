@@ -51,7 +51,7 @@ function addConCB(response, status, xhr){
 function deleteContact(id){
   let markedContact = document.getElementById(id);
   if(window.confirm("Are you sure you want to delete this contact?")){
-    let data = {"contactID": markedContact.ID}
+    let data = {"contactID": markedContact.ID};
     console.log(data)
     //API CALL
     $.ajax({
@@ -83,7 +83,6 @@ function deleteContact(id){
 
 function editContact(id){
   let curContact = document.getElementById(id);
-  curContact.queryS
 
 }
 // this takes the div class attribute as well as  the inner content
@@ -262,6 +261,7 @@ function searchCB(response, textStatus, xhr){
       currentContact = CONTACTS_PER_PAGE;
     } else {
       // TODO: no contacts found error message
+      updatePageState({});
     }
   } else {
     // TODO: please try again error msg
