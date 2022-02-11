@@ -52,8 +52,36 @@ function addConCB(response, status, xhr){
 function deleteContact(id){
   let markedContact = document.getElementById(id);
   if(window.confirm("Are you sure you want to delete this contact?")){
-    let data = {"contactId": id};
-    console.log(data, "\nIn"+ API.delCon)
+    let data = {contactId:id};
+    console.log(data, "\nIn"+ API.delCon);
+    //API CALL
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", urlBase + site + API.delCon, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.responseType = "json";
+    console.log(JSON.stringify(data));
+    console.log(urlBase + site + API.delCon);
+    xhr.send(JSON.stringify(data));
+    xhr.onload = function() {
+      var status = xhr.status;
+      if (status === 200) {
+        if (xhr.response.error === "") {
+          markedContact.remove();
+          window.alert("Contact successfully deleted")
+        } else {
+          window.alert("Contact does not exist")
+        }
+      }
+    }
+    console.log('HEY');
+  }
+}
+/*
+function deleteContact(id){
+  let markedContact = document.getElementById(id);
+  let data = {"contactId": id};
+  console.log(data, "\n In "+ API.delCon)
+  if(window.confirm("Are you sure you want to delete this contact?")){
     //API CALL
     $.ajax({
       url: urlBase + site + API.delCon,
@@ -75,10 +103,10 @@ function deleteContact(id){
         window.alert("Communication error, please try again")
       }
     }).always(function (xhr, status, error) {
-      console.log("IN ALWAYS,\n XHR:", xhr, "\nSTATUS:\n", status, "\nERR:\n", error)
+      // console.log("IN ALWAYS,\n XHR:", xhr, "\nSTATUS:\n", status, "\nERR:\n", error)
     })
   }
-}
+}*/
 
 // TODO: editcontact placeholder
 function editContact(id){
