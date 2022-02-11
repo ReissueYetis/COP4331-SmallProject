@@ -213,21 +213,7 @@ function getNextPage(){
 }
 
 function getPrevPage(){
-  console.log("CURRENT CONTACT IS AT "+ currentContact);
-  // Only get prev page if current page is above the
-  if(currentContact > 0 && currentContact-(CONTACTS_PER_PAGE*2) >= 0){
-    // if there are less contacts to be loaded than the amount per page
-    // just go to the last one that can be loaded
-    if(currentContact-(CONTACTS_PER_PAGE*2) >= 0){
-      loadContacts(currentResults,currentContact-(CONTACTS_PER_PAGE*2),currentContact-CONTACTS_PER_PAGE);
-      currentContact -= CONTACTS_PER_PAGE;
-    }
-    else{
-      console.log("THIS IS THE OTHER ELSE");
-      loadContacts(JSONResults.results,currentContact-currentContact,currentContact);
-      currentContact-=currentContact;
-    }
-  }
+    loadContacts(currentResults,0,10);
 }
 
 function addPageButtonListeners(){
