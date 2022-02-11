@@ -262,6 +262,7 @@ function searchCB(response, textStatus, xhr){
     } else {
       // TODO: no contacts found error message
       updatePageState({});
+      loadContacts(currentResults,0,CONTACTS_PER_PAGE);
     }
   } else {
     // TODO: please try again error msg
