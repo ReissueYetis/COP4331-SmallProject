@@ -177,19 +177,21 @@ function getContactInfo(contact){
 // this function changes state of info from hidden to showing or vis-versa
 function changeInfoState(contactNum){
   let contact = document.getElementById(contactNum);
-  let info = contact.querySelector(".additionalInfo");
+  let infoHeaders = contact.querySelector(".additionalInfo");
+  let infoContent = contact.querySelector(".additionalInfoContent");
   let editButtons = contact.querySelector(".editButtons");
   // if the div is hidden
   if(contact.getAttribute("infoHidden")=="true")
   {
-    info.setAttribute("class","additionalInfo");
+    infoHeaders.setAttribute("class","additionalInfo");
     contact.setAttribute("infoHidden","false");
     editButtons.setAttribute("class","row editButtons")
-
+    infoContent.setAttribute("class","row additionalInfoContent");
 
   }
   else{
-    applyHidden(info);
+    applyHidden(infoHeader);
+    applyHidden(infoContent);
     applyHidden(editButtons)
     contact.setAttribute("infoHidden","true");
   }
