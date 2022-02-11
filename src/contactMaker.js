@@ -89,16 +89,16 @@ function prepareDivEditContact(id){
   let lastNameInput = document.createElement("input");
   // Set attributes
   firstNameInput.setAttribute("value",curContact.getAttribute("firstName"));
-  firstNameInput.setAttribute("class","firstName");
+  firstNameInput.setAttribute("class","firstname");
   lastNameInput.setAttribute("value",curContact.getAttribute("lastName"));
-  firstNameInput.setAttribute("class","lastName");
+  firstNameInput.setAttribute("class","lastname");
   // append the children to the row class
   newNameInputRow.innerHTML = "";
   newNameInputRow.appendChild(firstNameInput);
   newNameInputRow.appendChild(lastNameInput);
   // for email and phone we do in place edits
-  let phoneDiv = curContact.querySelector(".phone");
-  let emailDiv = curContact.querySelector(".email");
+  let phoneDiv = curContact.querySelector(".phoneText");
+  let emailDiv = curContact.querySelector(".emailText");
   phoneDiv.type ="input";
   emailDiv.type ="input";
   phoneDiv.setAttribute("value",phoneDiv.value);
