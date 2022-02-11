@@ -84,18 +84,18 @@ function deleteContact(id){
 function prepareDivEditContact(id){
   let curContact = document.getElementById(id);
   // make the new name div and input fields
-  let newNameInputRow = curContact.querySelector(".contactNameText");
+  let inputRow = curContact.querySelector(".contactNameText");
   let firstNameInput = document.createElement("input");
   let lastNameInput = document.createElement("input");
   // Set attributes
-  firstNameInput.setAttribute("value",curContact.getAttribute("firstname"));
-  firstNameInput.setAttribute("class","firstname");
-  lastNameInput.setAttribute("value",curContact.getAttribute("lastname"));
-  firstNameInput.setAttribute("class","lastname");
+  firstNameInput.setAttribute("value",inputRow.getAttribute("firstname"));
+  firstNameInput.setAttribute("class","firstname col");
+  lastNameInput.setAttribute("value",inputRow.getAttribute("lastname"));
+  firstNameInput.setAttribute("class","lastname col");
   // append the children to the row class
-  newNameInputRow.innerHTML = "";
-  newNameInputRow.appendChild(firstNameInput);
-  newNameInputRow.appendChild(lastNameInput);
+  inputRow.innerHTML = "";
+  inputRow.appendChild(firstNameInput);
+  inputRow.appendChild(lastNameInput);
   // for email and phone we do in place edits
   let phoneDiv = curContact.querySelector(".phoneText");
   let emailDiv = curContact.querySelector(".emailText");
