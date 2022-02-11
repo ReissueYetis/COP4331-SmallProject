@@ -51,7 +51,7 @@ function addConCB(response, status, xhr){
 function deleteContact(id){
   let markedContact = document.getElementById(id);
   if(window.confirm("Are you sure you want to delete this contact?")){
-    let data = {"contactId": markedContact.ID}
+    let data = {"contactId": id};
     console.log(data)
     //API CALL
     $.ajax({
@@ -83,7 +83,6 @@ function deleteContact(id){
 
 function editContact(id){
   let curContact = document.getElementById(id);
-  curContact.queryS
 
 }
 // this takes the div class attribute as well as  the inner content
@@ -214,21 +213,9 @@ function getNextPage(){
 }
 
 function getPrevPage(){
-  console.log("CURRENT CONTACT IS AT "+ currentContact);
-  // Only get prev page if current page is above the
-  if(currentContact > 0 && currentContact-(CONTACTS_PER_PAGE*2) >= 0){
-    // if there are less contacts to be loaded than the amount per page
-    // just go to the last one that can be loaded
-    if(currentContact-(CONTACTS_PER_PAGE*2) >= 0){
-      loadContacts(currentResults,currentContact-(CONTACTS_PER_PAGE*2),currentContact-CONTACTS_PER_PAGE);
-      currentContact -= CONTACTS_PER_PAGE;
-    }
-    else{
-      console.log("THIS IS THE OTHER ELSE");
-      loadContacts(JSONResults.results,currentContact-currentContact,currentContact);
-      currentContact-=currentContact;
-    }
-  }
+  loadContacts(currentResults,0,10);
+  currentContact = 10;
+
 }
 
 function addPageButtonListeners(){
@@ -262,6 +249,8 @@ function searchCB(response, textStatus, xhr){
       currentContact = CONTACTS_PER_PAGE;
     } else {
       // TODO: no contacts found error message
+      updatePageState({});
+      loadContacts(currentResults,0,CONTACTS_PER_PAGE);
     }
   } else {
     // TODO: please try again error msg
