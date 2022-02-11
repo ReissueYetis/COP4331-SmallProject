@@ -17,6 +17,19 @@ function makeContactInfoDiv(divClass,email,phone){
   let ci = document.createElement("div");
   ci.setAttribute("class","row "+divClass);
   let emailDiv = document.createElement("div");
+  emailDiv.setAttribute("class","col contactInfoText");
+  emailDiv.innerHTML = email;
+  let phoneDiv= document.createElement("div");
+  phoneDiv.setAttribute("class","col contactInfoText");
+  phoneDiv.innerHTML = phone;
+  ci.appendChild(emailDiv);
+  ci.appendChild(phoneDiv);
+  return ci;
+}
+function makeContactInfoContentDiv(divClass,email,phone){
+  let ci = document.createElement("div");
+  ci.setAttribute("class","row "+divClass);
+  let emailDiv = document.createElement("div");
   emailDiv.setAttribute("class","col contactInfoText emailText");
   emailDiv.innerHTML = email;
   let phoneDiv= document.createElement("div");
@@ -26,6 +39,7 @@ function makeContactInfoDiv(divClass,email,phone){
   ci.appendChild(phoneDiv);
   return ci;
 }
+
 
 // adds a contact
 function addConCB(response, status, xhr){
@@ -174,7 +188,7 @@ function appendContactChildren(contact,contactDiv,number){
   let additionalInfo = document.createElement("div");
   additionalInfo.setAttribute("class","additionalInfo");
   additionalInfo.appendChild(makeContactInfoDiv("additionalInfoHeaders","Email","Phone"))
-  let contactInfo =  makeContactInfoDiv("additionalInfoContent",contact.EmailAddress,contact.PhoneNumber)
+  let contactInfo =  makeContactInfoContentDiv("additionalInfoContent",contact.EmailAddress,contact.PhoneNumber)
   // now we append the children
   let editButtons = makeEditAndDeleteButtonDiv(number);
   contactDiv.appendChild(contactName);
