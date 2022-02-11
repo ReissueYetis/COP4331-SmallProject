@@ -111,14 +111,20 @@ function prepareDivEditContact(id){
   inputRow.appendChild(firstNameInput);
   inputRow.appendChild(lastNameInput);
   // for email and phone we do in place edits
-  let phoneDiv = curContact.querySelector(".phoneText");
-  let emailDiv = curContact.querySelector(".emailText");
-  phoneDiv.type ="input";
-  emailDiv.type ="input";
-  phoneDiv.setAttribute("value",phoneDiv.value);
-  emailDiv.setAttribute("value",emailDiv.value);
+  let additionalInfoContentDiv = curContact.querySelector(".additionalInfoContent");
+  let oldPhoneDiv = curContact.querySelector(".phoneText");
+  let oldEmailDiv = curContact.querySelector(".emailText");
+  let newPhoneDiv = document.createElement("input");
+  let newEmailDiv = document.createElement("input");
+  newPhoneDiv.setAttribute("value",oldPhoneDiv.value);
+  newEmailDiv.setAttribute("value",oldEmailDiv.value);
+  newPhoneDiv.setAttribute("class","phoneText col");
+  newEmailDiv.setAttribute("class","emailText col");
   phoneDiv.innerHTML = "";
   emailDiv.innerHTML = "";
+  additionalInfoContentDiv.innerHTML = "";
+  additionalInfoContentDiv.appendChild(newEmailDiv);
+  additionalInfoContentDiv.appendChild(newPhoneDiv);
 }
 
 
