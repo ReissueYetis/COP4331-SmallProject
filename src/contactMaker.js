@@ -17,10 +17,10 @@ function makeContactInfoDiv(divClass,email,phone){
   let ci = document.createElement("div");
   ci.setAttribute("class","row "+divClass);
   let emailDiv = document.createElement("div");
-  emailDiv.setAttribute("class","col contactInfoText");
+  emailDiv.setAttribute("class","col contactInfoText emailText");
   emailDiv.innerHTML = email;
   let phoneDiv= document.createElement("div");
-  phoneDiv.setAttribute("class","col contactInfoText");
+  phoneDiv.setAttribute("class","col contactInfoText phoneText");
   phoneDiv.innerHTML = phone;
   ci.appendChild(emailDiv);
   ci.appendChild(phoneDiv);
@@ -81,11 +81,36 @@ function deleteContact(id){
 }
 
 // TODO: editcontact placeholder
-function editContact(id){
+function prepareDivEditContact(id){
   let curContact = document.getElementById(id);
+  // make the new name div and input fields
+  let newNameInputRow = curContact.querySelector(".contactNameText");
+  let firstNameInput = document.createElement("input");
+  let lastNameInput = document.createElement("input");
+  // Set attributes
+  firstNameInput.setAttribute("value",curContact.getAttribute("firstName"));
+  firstNameInput.setAttribute("class","firstName");
+  lastNameInput.setAttribute("value",curContact.getAttribute("lastName"));
+  firstNameInput.setAttribute("class","lastName");
+  // append the children to the row class
+  newNameInputRow.innerHTML = "";
+  newNameInputRow.appendChild(firstNameInput);
+  newNameInputRow.appendChild(lastNameInput);
+  // for email and phone we do in place edits
+  let phoneDiv = curContact.querySelector(".phone");
+  let emailDiv = curContact.querySelector(".email");
+  phoneDiv.type ="input";
+  emailDiv.type ="input";
+  phoneDiv.setAttribute("value",phoneDiv.value);
+  emailDiv.setAttribute("value",emailDiv.value);
+  phoneDiv.innerHTML = "";
+  emailDiv.innerHTML = "";
+}
 
+
+function apiCallForEdit(){
   // get data stuff here
-  let data
+  let data;
 
   // API call
   console.log(data, "\nIn"+ API.editCon)
@@ -136,6 +161,8 @@ function appendContactChildren(contact,contactDiv,number){
   // Below is for the name title
   let contactName = document.createElement("div");
   contactName.setAttribute("class","contactNameText col");
+  contactName.setAttribute("firstName",contact.FirstName);
+  contactName.setAttribute("lastName",contact.LastName);
   contactName.innerHTML = contact.FirstName +" "+contact.LastName;
   // the extend button
   let extendButton = document.createElement("button");
