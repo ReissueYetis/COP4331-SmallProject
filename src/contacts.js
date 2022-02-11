@@ -42,6 +42,7 @@ $(function() {
         submitHandler: function (form, event) {
             event.preventDefault()
             // console.log(event)
+
             let data = getFormInfo($("#addConForm"))
             postHandler(data, addConCB, API.addCon)
         },
@@ -101,7 +102,7 @@ $(function() {
         submitHandler: function (form, event){
             event.preventDefault()
             let data = getLoginInfo($("#accDelForm"))
-            postHandler(data, accDeleteCB, API.delCon)
+            postHandler(data, accDeleteCB, API.delAcc)
         },// validation settings for form
         rules: {
             login: "required",

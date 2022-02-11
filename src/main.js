@@ -31,6 +31,8 @@ const valMsg = {
     loginErr: "Login failed, please try again",
     accDelSucc: "Account deletion successful",
     accDelErr: "Account deletion failed, please try again",
+    addConSucc: "Contact created!",
+    conExist: "Contact already exists",
     addConErr: "Contact creation failed, please try again"
 }
 

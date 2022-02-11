@@ -32,14 +32,14 @@ function addConCB(response, status, xhr){
   let newContact
   if (status !== "error") {
     if (response.error === "") {
-      $("#addConAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.regSucc)
+      $("#addConAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.addConSucc)
       let searchData = {
         "userId" : readCookie("id"), //55
         "search" : $("#searchBar").val()
       }
       postHandler(searchData, searchCB, API.searchCon)
     } else {
-      $("#addConAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.userExist)
+      $("#addConAlert").removeClass("collapse alert-success").addClass("alert-danger").text(valMsg.conExist)
       // $("#loginPass").removeClass("is-valid")
       // $("#loginUser").removeClass("is-valid")
     }
@@ -51,7 +51,7 @@ function addConCB(response, status, xhr){
 function deleteContact(id){
   let markedContact = document.getElementById(id);
   if(window.confirm("Are you sure you want to delete this contact?")){
-    let data = {"contactID": markedContact.ID}
+    let data = {"contactId": markedContact.ID}
     console.log(data)
     //API CALL
     $.ajax({
