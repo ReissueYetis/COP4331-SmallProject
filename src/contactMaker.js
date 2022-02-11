@@ -93,6 +93,22 @@ function deleteContact(id){
     })
   }
 }
+function makeEditButtons(contactID){
+  let newRow = document.createElement("div");
+  newRow.setAttribute("class","row editButtons");
+  newRow.setAttribute("contactID",contactID);
+  let confirmEditButton = document.createElement("button");
+  let rejectEditButton = document.createElement("button");
+  confirmEditButton.setAttribute("class","col text-right editContactButton");
+  rejectEditButton.setAttribute("class","col removeContactButton");
+  rejectEditButton.addEventListener("click",function(){ rejectEdit() });
+  confirmEditButton.addEventListener("click",function(){ confirmEdit(contactID) });
+  confirmEditButton.innerHTML = "Confirm Edit";
+  rejectEditButton.innerHTML = "Reject Edit";
+  newRow.appendChild(confirmEditButton);
+  newRow.appendChild(rejectEditButton);
+  return newRow;
+}
 
 // TODO: editcontact placeholder
 function prepareDivEditContact(id){
@@ -110,7 +126,7 @@ function prepareDivEditContact(id){
   inputRow.innerHTML = "";
   inputRow.appendChild(firstNameInput);
   inputRow.appendChild(lastNameInput);
-  // for email and phone we do in place edits
+  // do the same for email and phone
   let additionalInfoContentDiv = curContact.querySelector(".additionalInfoContent");
   let oldPhoneDiv = curContact.querySelector(".phoneText");
   let oldEmailDiv = curContact.querySelector(".emailText");
@@ -123,6 +139,9 @@ function prepareDivEditContact(id){
   additionalInfoContentDiv.innerHTML = "";
   additionalInfoContentDiv.appendChild(newEmailDiv);
   additionalInfoContentDiv.appendChild(newPhoneDiv);
+  // remove old buttons
+  curContact.querySelector(".editButtons").remove();
+  curContact.appendChild(makeEditButtons(id));
 }
 
 
