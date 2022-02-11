@@ -71,6 +71,7 @@ $(function() {
 
     // edit contact
     // will probably need to change the selector to not reference unique ID's
+    /*
     $("#editConForm").validate({
         submitHandler:  function (form, event) {
             event.preventDefault()
@@ -96,6 +97,7 @@ $(function() {
             }
         }
     })
+    */
 
     //delete account
     $("#accDelForm").validate({

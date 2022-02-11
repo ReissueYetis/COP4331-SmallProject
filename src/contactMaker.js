@@ -33,6 +33,7 @@ function addConCB(response, status, xhr){
   if (status !== "error") {
     if (response.error === "") {
       $("#addConAlert").removeClass("collapse alert-danger").addClass("alert-success").text(valMsg.addConSucc)
+      // re-search to show new contact
       let searchData = {
         "userId" : readCookie("id"), //55
         "search" : $("#searchBar").val()
@@ -52,7 +53,7 @@ function deleteContact(id){
   let markedContact = document.getElementById(id);
   if(window.confirm("Are you sure you want to delete this contact?")){
     let data = {"contactId": id};
-    console.log(data)
+    console.log(data, "\nIn"+ API.delCon)
     //API CALL
     $.ajax({
       url: urlBase + site + API.delCon,
@@ -61,14 +62,12 @@ function deleteContact(id){
       contentType: "application/json; charset=UTF-8",
       dataType: "json",
       success: function (response, textStatus, xhr) {
-        console.log(API.delCon, " SUCCESS:\n", response, textStatus)
-        if (textStatus !== "error") {
-          if (response.error === "") {
-            markedContact.remove();
-            window.alert("Contact successfully deleted")
-          } else {
-            window.alert("Contact does not exist")
-          }
+        console.log("SUCCESS:\n", response, textStatus)
+        if (response.error === "") {
+          markedContact.remove();
+          window.alert("Contact successfully deleted")
+        } else {
+          window.alert("Contact does not exist")
         }
       },
       error: function(xhr, textStatus, error){
@@ -81,10 +80,38 @@ function deleteContact(id){
   }
 }
 
+// TODO: editcontact placeholder
 function editContact(id){
   let curContact = document.getElementById(id);
 
+  // get data stuff here
+  let data
+
+  // API call
+  console.log(data, "\nIn"+ API.editCon)
+  $.ajax({
+    url: urlBase + site + API.editCon,
+    data: data,
+    method: "POST",
+    contentType: "application/json; charset=UTF-8",
+    dataType: "json",
+    success: function (response, textStatus, xhr) {
+      console.log("SUCCESS:\n", response, textStatus)
+
+      if (response.error === "") {
+
+      } else {
+
+      }
+    },
+    error: function(xhr, textStatus, error){
+      console.log("\n\tERROR:\n", textStatus, error)
+    }
+  }).always(function (xhr, status, error) {
+    console.log("IN ALWAYS,\n XHR:", xhr, "\nSTATUS:\n", status, "\nERR:\n", error)
+  })
 }
+
 // this takes the div class attribute as well as  the inner content
 function makeEditAndDeleteButtonDiv(contactID){
   let newRow = document.createElement("div");
