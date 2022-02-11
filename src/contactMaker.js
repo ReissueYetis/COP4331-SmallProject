@@ -51,7 +51,7 @@ function addConCB(response, status, xhr){
 function deleteContact(id){
   let markedContact = document.getElementById(id);
   if(window.confirm("Are you sure you want to delete this contact?")){
-    let data = {"contactId": markedContact.ID};
+    let data = {"contactId": id};
     console.log(data)
     //API CALL
     $.ajax({
