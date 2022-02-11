@@ -127,7 +127,9 @@ function appendContactChildren(contact,contactDiv,number){
   contactDiv.appendChild(extendButton);
   applyHidden(additionalInfo);
   applyHidden(editButtons);
+  applyHidden(contactInfo);
   contactDiv.appendChild(additionalInfo);
+  contactDiv.appendChild(contactInfo)
   contactDiv.appendChild(editButtons);
 }
 // loads contacts in range
