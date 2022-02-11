@@ -88,9 +88,9 @@ function prepareDivEditContact(id){
   let firstNameInput = document.createElement("input");
   let lastNameInput = document.createElement("input");
   // Set attributes
-  firstNameInput.setAttribute("value",curContact.getAttribute("firstName"));
+  firstNameInput.setAttribute("value",curContact.getAttribute("firstname"));
   firstNameInput.setAttribute("class","firstname");
-  lastNameInput.setAttribute("value",curContact.getAttribute("lastName"));
+  lastNameInput.setAttribute("value",curContact.getAttribute("lastname"));
   firstNameInput.setAttribute("class","lastname");
   // append the children to the row class
   newNameInputRow.innerHTML = "";
