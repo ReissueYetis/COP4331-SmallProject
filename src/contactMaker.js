@@ -118,8 +118,8 @@ function prepareDivEditContact(id){
   let newEmailDiv = document.createElement("input");
   newPhoneDiv.setAttribute("value",oldPhoneDiv.innerHTML);
   newEmailDiv.setAttribute("value",oldEmailDiv.innerHTML);
-  newPhoneDiv.setAttribute("class","phoneText col");
-  newEmailDiv.setAttribute("class","emailText col");
+  newPhoneDiv.setAttribute("class","phoneText contactInfoText col");
+  newEmailDiv.setAttribute("class","emailText contactInfoText col");
   additionalInfoContentDiv.innerHTML = "";
   additionalInfoContentDiv.appendChild(newEmailDiv);
   additionalInfoContentDiv.appendChild(newPhoneDiv);
