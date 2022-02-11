@@ -189,7 +189,8 @@ function changeInfoState(contactNum){
 
   }
   else{
-    applyHidden(info);
+    applyHidden(infoHeader);
+    applyHidden(infoContent);
     applyHidden(editButtons)
     contact.setAttribute("infoHidden","true");
   }
