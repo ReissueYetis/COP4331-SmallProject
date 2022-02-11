@@ -67,6 +67,34 @@ function deleteContact(id){
   let markedContact = document.getElementById(id);
   if(window.confirm("Are you sure you want to delete this contact?")){
     let data = {contactId:id};
+    console.log(data, "\nIn"+ API.delCon);
+    //API CALL
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", urlBase + site + API.delCon, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.responseType = "json";
+    console.log(JSON.stringify(data));
+    console.log(urlBase + site + API.delCon);
+    xhr.send(JSON.stringify(data));
+    xhr.onload = function() {
+      var status = xhr.status;
+      if (status === 200) {
+        if (xhr.response.error === "") {
+          markedContact.remove();
+          window.alert("Contact successfully deleted")
+        } else {
+          window.alert("Contact does not exist")
+        }
+      }
+    }
+    console.log('HEY');
+  }
+}
+/*
+function deleteContact(id){
+  let markedContact = document.getElementById(id);
+  if(window.confirm("Are you sure you want to delete this contact?")){
+    let data = {contactId:id};
     console.log(data, "\nIn"+ API.delCon)
     //API CALL
     $.ajax({
@@ -93,6 +121,7 @@ function deleteContact(id){
     })
   }
 }
+*/
 function makeEditButtons(contactID){
   let newRow = document.createElement("div");
   newRow.setAttribute("class","row editButtons");
