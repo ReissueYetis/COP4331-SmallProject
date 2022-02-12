@@ -149,10 +149,19 @@ function makeEditButtons(contactID){
 function rejectEdit(){
   resetPageState();
 }
+function getChildValueByClass(parent,divClass){
+  return parent.getElementByClass(divClass).value;
+}
 function confirmEdit(contactID){
   //DO API CALL HERE
   // IF THE CALL IS VALID RESET STATE
   // OTHERWISE DISPLAY ISSUE AND WAIT UNTIL BUTTON IS PRESSED AGAIN
+  let contact = document.getElementById(contactID);
+  let firstName  = getChildValueByClass(contact,"firstname");
+  let lastName  = getChildValueByClass(contact,"lastname");
+  let email = getChildValueByClass(contact,"emailText");
+  let phone = getChildValueByClass(contact,"phoneText");
+  console.log("fn "+firstName+"ln "+lastName+"email "+email+"phone "+phone);
   resetPageState();
 
 }
@@ -168,7 +177,7 @@ function prepareDivEdit(id){
   firstNameInput.setAttribute("value",inputRow.getAttribute("firstname"));
   firstNameInput.setAttribute("class","firstname col");
   lastNameInput.setAttribute("value",inputRow.getAttribute("lastname"));
-  firstNameInput.setAttribute("class","lastname col");
+  lastNameInput.setAttribute("class","lastname col");
   // append the children to the row class
   inputRow.innerHTML = "";
   inputRow.appendChild(firstNameInput);
