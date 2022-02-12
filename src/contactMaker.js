@@ -63,6 +63,7 @@ function addConCB(response, status, xhr){
   }
 }
 
+
 function deleteContact(id){
   let markedContact = document.getElementById(id);
   if(window.confirm("Are you sure you want to delete this contact?")){
@@ -82,6 +83,12 @@ function deleteContact(id){
         if (xhr.response.error === "") {
           markedContact.remove();
           window.alert("Contact successfully deleted")
+          // re-search to remove deleted contact on page change
+          let searchData = {
+            "userId" : readCookie("id"),
+            "search" : $("#searchBar").val()
+          }
+          postHandler(searchData, searchCB, API.searchCon)
         } else {
           window.alert("Contact does not exist")
         }
@@ -122,6 +129,7 @@ function deleteContact(id){
   }
 }
 */
+
 function makeEditButtons(contactID){
   let newRow = document.createElement("div");
   newRow.setAttribute("class","row editButtons");
