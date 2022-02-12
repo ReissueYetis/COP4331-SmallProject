@@ -161,7 +161,14 @@ function confirmEdit(contactID){
   let lastName  = getChildValueByClass(contact,"lastname");
   let email = getChildValueByClass(contact,"emailText");
   let phone = getChildValueByClass(contact,"phoneText");
-  console.log("fn "+firstName+"ln "+lastName+"email "+email+"phone "+phone);
+  let apiCall = {
+  "id": contactID,
+  "firstName": firstName,
+  "lastName": lastName,
+  "emailAddress": email,
+  "phoneNumber": phone
+  }
+  apiCallForEdit(apiCall);
   resetPageState();
 
 }
@@ -201,9 +208,7 @@ function prepareDivEdit(id){
 }
 
 
-function apiCallForEdit(){
-  // get data stuff here
-  let data;
+function apiCallForEdit(data){
 
   // API call
   console.log(data, "\nIn"+ API.editCon)
