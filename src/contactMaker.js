@@ -150,7 +150,7 @@ function rejectEdit(){
   resetPageState();
 }
 function getChildValueByClass(parent,divClass){
-  return parent.getElementByClass(divClass).value;
+  return parent.querySelector("."+divClass).value;
 }
 function confirmEdit(contactID){
   //DO API CALL HERE
