@@ -407,6 +407,7 @@ function loadInitialPageState(){
 function resetPageState(){
   currentContact = CONTACTS_PER_PAGE;
   searchAndUpdate();
+  loadContacts(currentResults,0,CONTACTS_PER_PAGE);
 
 }
 function updatePageState(results){
