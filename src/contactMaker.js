@@ -374,7 +374,7 @@ function addSearchBarEL(){
 
 }
 */
-function searchAndUpdate(id){
+function searchAndUpdate(){
   // first get search bar contents
   let searchBar = document.querySelector("#searchBar");
 
@@ -405,8 +405,9 @@ function loadInitialPageState(){
   userID = readCookie("id");
 }
 function resetPageState(){
-      loadContacts(currentResults,0,CONTACTS_PER_PAGE);
-      currentContact = CONTACTS_PER_PAGE;
+  currentContact = CONTACTS_PER_PAGE;
+  searchAndUpdate();
+
 }
 function updatePageState(results){
   currentResults = results;
