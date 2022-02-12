@@ -149,13 +149,13 @@ function makeEditButtons(contactID){
 function rejectEdit(){
   resetPageState();
 }
-function confirmEdit(contactID)[
+function confirmEdit(contactID){
   //DO API CALL HERE
   // IF THE CALL IS VALID RESET STATE
   // OTHERWISE DISPLAY ISSUE AND WAIT UNTIL BUTTON IS PRESSED AGAIN
   resetPageState();
 
-]
+}
 
 // TODO: editcontact placeholder
 function prepareDivEdit(id){
