@@ -152,6 +152,26 @@ function rejectEdit(){
 function getChildValueByClass(parent,divClass){
   return parent.querySelector("."+divClass).value;
 }
+function apiCallForEdit(data){
+    //API CALL
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", urlBase + site + API.editCon, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.responseType = "json";
+    console.log(JSON.stringify(data));
+    console.log(urlBase + site + API.editCon);
+    xhr.send(JSON.stringify(data));
+    xhr.onload = function() {
+      var status = xhr.status;
+      if (status === 200) {
+        if (xhr.response.error === "") {
+
+        } else {
+        }
+      }
+    }
+    console.log('HEY');
+  }
 function confirmEdit(contactID){
   //DO API CALL HERE
   // IF THE CALL IS VALID RESET STATE
@@ -161,13 +181,7 @@ function confirmEdit(contactID){
   let lastName  = getChildValueByClass(contact,"lastname");
   let email = getChildValueByClass(contact,"emailText");
   let phone = getChildValueByClass(contact,"phoneText");
-  let apiCall = {
-  "id": contactID,
-  "firstName": firstName,
-  "lastName": lastName,
-  "emailAddress": email,
-  "phoneNumber": phone
-  }
+  let apiCall = {"id": contactID,"firstName": firstName,"lastName": lastName,"emailAddress": email,"phoneNumber": phone};
   apiCallForEdit(apiCall);
   resetPageState();
 
@@ -207,33 +221,6 @@ function prepareDivEdit(id){
   curContact.appendChild(makeEditButtons(id));
 }
 
-
-function apiCallForEdit(data){
-
-  // API call
-  console.log(data, "\nIn"+ API.editCon)
-  $.ajax({
-    url: urlBase + site + API.editCon,
-    data: data,
-    method: "POST",
-    contentType: "application/json; charset=UTF-8",
-    dataType: "json",
-    success: function (response, textStatus, xhr) {
-      console.log("SUCCESS:\n", response, textStatus)
-
-      if (response.error === "") {
-
-      } else {
-
-      }
-    },
-    error: function(xhr, textStatus, error){
-      console.log("\n\tERROR:\n", textStatus, error)
-    }
-  }).always(function (xhr, status, error) {
-    console.log("IN ALWAYS,\n XHR:", xhr, "\nSTATUS:\n", status, "\nERR:\n", error)
-  })
-}
 
 // this takes the div class attribute as well as  the inner content
 function makeEditAndDeleteButtonDiv(contactID){
