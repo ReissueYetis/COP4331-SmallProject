@@ -183,7 +183,7 @@ function confirmEdit(contactID){
   let phone = getChildValueByClass(contact,"phoneText");
   let apiCall = {"id": contactID,"firstName": firstName,"lastName": lastName,"emailAddress": email,"phoneNumber": phone};
   apiCallForEdit(apiCall);
-  setTimeout(()=>{ resetPageState() },750);
+  setTimeout(()=>{ resetPageState() },100);
 
 }
 
