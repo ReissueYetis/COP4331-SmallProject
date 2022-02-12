@@ -1,7 +1,7 @@
 let currentContact = 0;
 const CONTACTS_PER_PAGE = 10;
 let currentResults;
-let userID
+let userID;
 
 function makeContactDiv(contact,number){
   let contactDiv = document.createElement("div");
@@ -414,4 +414,5 @@ function updatePageState(results){
 
 // addSearchBarEL()
 // postHandler({userId:userID, search:""},searchCB,API.searchCon);
+loadInitialPageState();
 addPageButtonListeners();
