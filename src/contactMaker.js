@@ -146,9 +146,19 @@ function makeEditButtons(contactID){
   newRow.appendChild(rejectEditButton);
   return newRow;
 }
+function rejectEdit(){
+  resetPageState();
+}
+function confirmEdit(contactID)[
+  //DO API CALL HERE
+  // IF THE CALL IS VALID RESET STATE
+  // OTHERWISE DISPLAY ISSUE AND WAIT UNTIL BUTTON IS PRESSED AGAIN
+  resetPageState();
+
+]
 
 // TODO: editcontact placeholder
-function prepareDivEditContact(id){
+function prepareDivEdit(id){
   let curContact = document.getElementById(id);
   // make the new name div and input fields
   let inputRow = curContact.querySelector(".contactNameText");
@@ -221,6 +231,7 @@ function makeEditAndDeleteButtonDiv(contactID){
   editButton.setAttribute("class","col text-right editContactButton");
   deleteButton.setAttribute("class","col removeContactButton");
   deleteButton.addEventListener("click",function(){ deleteContact(contactID) });
+  editButton.addEventListener("click",function(){prepareDivEdit(contactID)});
   editButton.innerHTML = "Edit Contact";
   deleteButton.innerHTML = "Remove Contact";
   newRow.appendChild(editButton);
@@ -391,7 +402,10 @@ function searchCB(response, textStatus, xhr){
 // which will fill the page
 function loadInitialPageState(){
   userID = readCookie("id");
-  console.log(userID);
+}
+function resetPageState(){
+      loadContacts(currentResults,0,CONTACTS_PER_PAGE);
+      currentContact = CONTACTS_PER_PAGE;
 }
 function updatePageState(results){
   currentResults = results;
