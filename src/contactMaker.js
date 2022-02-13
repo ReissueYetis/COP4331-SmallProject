@@ -403,10 +403,10 @@ function searchCB(response, textStatus, xhr){
 // which will fill the page
 function loadInitialPageState(){
   userID = readCookie("id");
+  searchAndUpdate();
 }
 function resetPageState(){
   searchAndUpdate();
-
 }
 function updatePageState(results){
   currentResults = results;
